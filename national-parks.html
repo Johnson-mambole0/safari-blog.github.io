@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National Parks | Savanna & Summit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.parks-list-section { background: var(--warm-white); }
+.park-entry {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; margin-bottom: 0;
+  border: 1px solid rgba(196,98,45,0.12);
+  border-bottom: none; overflow: hidden;
+}
+.park-entry:first-child { border-radius: 3px 3px 0 0; }
+.park-entry:last-child { border-bottom: 1px solid rgba(196,98,45,0.12); border-radius: 0 0 3px 3px; }
+.park-entry.flip { direction: rtl; }
+.park-entry.flip > * { direction: ltr; }
+.park-entry-img { position: relative; min-height: 380px; overflow: hidden; }
+.park-entry-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: transform 0.6s; }
+.park-entry:hover .park-entry-img img { transform: scale(1.04); }
+.park-badge {
+  position: absolute; top: 1.5rem; left: 1.5rem;
+  background: rgba(253,250,244,0.92); border: 1px solid rgba(196,98,45,0.25);
+  padding: 0.4rem 0.9rem; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terra);
+  backdrop-filter: blur(8px);
+}
+.park-entry-body { padding: 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; background: var(--warm-white); }
+.park-entry.flip .park-entry-body { background: var(--sand-light); }
+.park-num { font-family: var(--serif); font-size: 4rem; color: rgba(196,98,45,0.1); line-height: 1; margin-bottom: 0.5rem; }
+.park-name { font-family: var(--serif); font-size: 2rem; color: var(--bark); margin-bottom: 0.75rem; line-height: 1.1; }
+.park-name em { font-style: italic; color: var(--clay); }
+.park-desc { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 1.5rem; }
+.park-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+.highlight-pill { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--terra); background: rgba(196,98,45,0.08); padding: 0.3rem 0.75rem; border-radius: 50px; }
+.park-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+.pmeta-item { }
+.pmeta-n { font-family: var(--serif); font-size: 1.3rem; color: var(--terra); line-height: 1; }
+.pmeta-l { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+
+/* Map placeholder */
+.map-section { background: var(--sand); padding: 6rem 5rem; }
+.map-placeholder {
+  background: var(--sand-mid); border: 1px solid rgba(196,98,45,0.2);
+  height: 480px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  margin-top: 3rem; overflow: hidden; position: relative;
+}
+.map-placeholder img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+.map-overlay-text { position: absolute; text-align: center; }
+.map-overlay-text h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--bark); }
+.map-overlay-text p { font-size: 0.9rem; color: var(--text-mid); margin-top: 0.5rem; }
+
+@media (max-width: 960px) {
+  .park-entry, .park-entry.flip { grid-template-columns: 1fr; direction: ltr; }
+  .park-entry-img { min-height: 260px; }
+  .park-entry-body { padding: 2rem 1.5rem; }
+  .map-section { padding: 4rem 1.5rem; }
+  .map-placeholder { height: 300px; }
+}
+</style>
+</head>
+<body>
+<nav id="nav" class="solid">
+  <a href="index.html" class="nav-logo">Savanna <span>&</span> Summit</a>
+  <ul class="nav-links">
+    <li><a href="safari.html">Safari</a></li>
+    <li><a href="climbing.html">Climbing</a></li>
+    <li><a href="national-parks.html" class="active">National Parks</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-nav" id="mob-nav">
+  <div class="mobile-nav-close" id="mob-close">&#10005;</div>
+  <a href="index.html">Home</a>
+  <a href="safari.html">Safari</a>
+  <a href="climbing.html">Climbing</a>
+  <a href="national-parks.html">National Parks</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Plan My Trip</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero" id="parks">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=1600&q=85');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-arch"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 L0,40 Q360,0 720,30 Q1080,60 1440,20 L1440,80 Z" fill="#FDFAF4"/></svg></div>
+  <div class="page-hero-content rise d1">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>National Parks</div>
+    <h1>Tanzania's <em>National Parks</em></h1>
+    <p>Seven extraordinary ecosystems — from the world's greatest wildlife migration to the last wild rhinos of East Africa.</p>
+  </div>
+</div>
+
+<!-- PARKS LIST -->
+<section class="parks-list-section">
+  <div class="container">
+    <div class="section-eyebrow">The Parks</div>
+    <h2 class="section-h2">Seven worlds, <em>one country</em></h2>
+    <p class="section-lead" style="margin-bottom:3rem;">Tanzania's national parks cover an area larger than France. Each has a completely different character, wildlife and atmosphere — many travellers return again and again to explore them all.</p>
+
+    <!-- Serengeti -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80" alt="Serengeti" loading="lazy">
+        <div class="park-badge">UNESCO World Heritage Site</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">01</div>
+        <div class="park-name">Serengeti<br><em>National Park</em></div>
+        <p class="park-desc">The Serengeti is the greatest wildlife spectacle on earth. Vast golden plains stretching to every horizon, home to the world's largest mammal migration — 1.5 million wildebeest, hundreds of thousands of zebra and gazelle moving in an ancient cycle of survival.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Great Migration</span>
+          <span class="highlight-pill">Big Five</span>
+          <span class="highlight-pill">Balloon Safaris</span>
+          <span class="highlight-pill">Cheetah</span>
+          <span class="highlight-pill">Wild Dog</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">14,763 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Year-round</div><div class="pmeta-l">Best Visited</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">1.5M+</div><div class="pmeta-l">Wildebeest</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Ngorongoro -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=900&q=80" alt="Ngorongoro" loading="lazy">
+        <div class="park-badge">UNESCO World Heritage Site</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">02</div>
+        <div class="park-name">Ngorongoro<br><em>Crater</em></div>
+        <p class="park-desc">The world's largest intact volcanic caldera, Ngorongoro is often called the "Garden of Eden." The crater floor teems with an astonishing density of wildlife — lion, elephant, black rhino, flamingo and more — all within a natural bowl that feels like a lost world.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Black Rhino</span>
+          <span class="highlight-pill">Dense Wildlife</span>
+          <span class="highlight-pill">Flamingos</span>
+          <span class="highlight-pill">Maasai Villages</span>
+          <span class="highlight-pill">Olduvai Gorge</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">304 km²</div><div class="pmeta-l">Crater Floor</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">2,200m</div><div class="pmeta-l">Crater Rim</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">25,000+</div><div class="pmeta-l">Animals inside</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Tarangire -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1568111561564-08726a1563e1?w=900&q=80" alt="Tarangire" loading="lazy">
+        <div class="park-badge">Elephant Country</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">03</div>
+        <div class="park-name">Tarangire<br><em>National Park</em></div>
+        <p class="park-desc">Famous for its extraordinary elephant populations — some of the largest in Africa — Tarangire is characterised by ancient baobab trees and the meandering Tarangire River. In the dry season, animals crowd the river in incredible numbers, making it one of Tanzania's most productive game-viewing destinations.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Elephant Herds</span>
+          <span class="highlight-pill">Baobab Trees</span>
+          <span class="highlight-pill">Walking Safaris</span>
+          <span class="highlight-pill">Rare Oryx</span>
+          <span class="highlight-pill">Night Drives</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">2,850 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Jun–Oct</div><div class="pmeta-l">Best Season</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">3,000+</div><div class="pmeta-l">Elephants</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Lake Manyara -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1504440374568-c6d6bce52fa2?w=900&q=80" alt="Lake Manyara" loading="lazy">
+        <div class="park-badge">Tree-Climbing Lions</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">04</div>
+        <div class="park-name">Lake Manyara<br><em>National Park</em></div>
+        <p class="park-desc">A diverse and compact park running along the shores of an alkaline soda lake. Famous for its tree-climbing lions — a unique behaviour rarely seen elsewhere — and for the million-strong flamingo flocks that colour the lake pink. An ideal first or last stop on any northern circuit safari.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Tree-climbing Lions</span>
+          <span class="highlight-pill">Flamingos</span>
+          <span class="highlight-pill">Hippos</span>
+          <span class="highlight-pill">Hot Springs</span>
+          <span class="highlight-pill">Birdwatching</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">330 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Year-round</div><div class="pmeta-l">Best Visited</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">400+</div><div class="pmeta-l">Bird Species</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Arusha NP -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1551292831-023188e78222?w=900&q=80" alt="Arusha NP" loading="lazy">
+        <div class="park-badge">City Gateway</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">05</div>
+        <div class="park-name">Arusha<br><em>National Park</em></div>
+        <p class="park-desc">Often overlooked in favour of its famous neighbours, Arusha National Park punches well above its weight. Nestled around Mount Meru, it offers walking safaris, canoeing on Fig Tree Crater Lake, and excellent giraffe and buffalo sightings — all within an hour of Arusha city.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Walking Safari</span>
+          <span class="highlight-pill">Canoeing</span>
+          <span class="highlight-pill">Colobus Monkeys</span>
+          <span class="highlight-pill">Giraffe</span>
+          <span class="highlight-pill">Mount Meru</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">552 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">45 min</div><div class="pmeta-l">From Arusha</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">4,562m</div><div class="pmeta-l">Mount Meru</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Lake Natron -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=900&q=80" alt="Lake Natron" loading="lazy">
+        <div class="park-badge">Flamingo Breeding Ground</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">06</div>
+        <div class="park-name">Lake Natron<br><em>&amp; Ol Doinyo Lengai</em></div>
+        <p class="park-desc">One of Africa's most otherworldly landscapes. The blood-red alkaline lake is the world's primary flamingo breeding ground, and the adjacent Ol Doinyo Lengai volcano — the "Mountain of God" — is one of the most active in Africa. A truly off-the-beaten-path destination.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Flamingo Breeding</span>
+          <span class="highlight-pill">Active Volcano</span>
+          <span class="highlight-pill">Maasai Culture</span>
+          <span class="highlight-pill">Dramatic Scenery</span>
+          <span class="highlight-pill">Photography</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">57 km</div><div class="pmeta-l">Lake Length</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">2,962m</div><div class="pmeta-l">Lengai Volcano</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">1.5M+</div><div class="pmeta-l">Flamingos</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" style="padding: 8rem 5rem;">
+  <div class="cta-bg" style="background-image: url('https://images.unsplash.com/photo-1486591038519-6e719f5f6a05?w=1600&q=80');"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Plan Your Parks</div>
+    <h2 class="cta-h2">Which park will <em>call you first?</em></h2>
+    <p class="cta-p">Let our team help you design the perfect park circuit — we know every corner of Tanzania and will match the right combination to your time and interests.</p>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-light">Plan My Safari →</a>
+      <a href="safari.html" class="btn-outline-light">View Safari Packages</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="contact-strip">
+  <p class="contact-strip-copy"><strong>Ready to talk?</strong> Our team is available 7 days a week.</p>
+  <div class="contact-chips">
+    <a href="mailto:hello@savannaandsummit.co.tz" class="chip">&#9993; hello@savannaandsummit.co.tz</a>
+    <a href="tel:+255000000000" class="chip">&#9990; +255 000 000 000</a>
+    <a href="https://wa.me/255000000000" class="chip">WhatsApp</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-logo">Savanna <em style="font-style:italic;">&amp;</em> Summit</a>
+      <p class="footer-about">Tanzania's trusted operator for national park safaris and mountain expeditions. Based in Arusha, guided by passion, committed to the land we love.</p>
+      <div class="footer-socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">fb</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Safari</h5>
+      <ul>
+        <li><a href="safari.html">Safari Overview</a></li>
+        <li><a href="national-parks.html">National Parks</a></li>
+        <li><a href="safari.html">Private Safari</a></li>
+        <li><a href="safari.html">Group Safari</a></li>
+        <li><a href="safari.html">Great Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Climbing</h5>
+      <ul>
+        <li><a href="climbing.html">Climbing Overview</a></li>
+        <li><a href="climbing.html">Lemosho Route</a></li>
+        <li><a href="climbing.html">Machame Route</a></li>
+        <li><a href="climbing.html">Mount Meru</a></li>
+        <li><a href="climbing.html">Climbing FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Our Guides</a></li>
+        <li><a href="about.html">Conservation</a></li>
+        <li><a href="about.html">Reviews</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Savanna &amp; Summit. All rights reserved. &middot; Arusha, Tanzania</span>
+    <div class="footer-certs">
+      <span class="cert">Licensed Tour Operator</span>
+      <span class="cert">Tanzania Tourism Board</span>
+    </div>
+  </div>
+</footer>
+<a href="https://wa.me/255000000000" class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>
+  <span class="wa-float-label">Chat with us</span>
+</a>
+<script>
+(function(){
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+  var ham = document.getElementById('ham');
+  var mob = document.getElementById('mob-nav');
+  var cls = document.getElementById('mob-close');
+  if(ham) ham.addEventListener('click', function(){ mob.classList.add('open'); });
+  if(cls) cls.addEventListener('click', function(){ mob.classList.remove('open'); });
+  document.querySelectorAll('.mobile-nav a').forEach(function(a){
+    a.addEventListener('click', function(){ mob.classList.remove('open'); });
+  });
+})();
+</script>
+</body>
+</html>
