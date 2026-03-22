@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mountain Climbing | Godhope Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Route cards */
+.routes-section { background: var(--warm-white); }
+.route-cards { display: flex; flex-direction: column; gap: 0; margin-top: 3rem; }
+.route-card {
+  display: grid; grid-template-columns: 280px 1fr auto;
+  border: 1px solid rgba(196,98,45,0.15); border-bottom: none;
+  overflow: hidden; background: var(--warm-white);
+  transition: background 0.25s;
+}
+.route-card:first-child { border-radius: 3px 3px 0 0; }
+.route-card:last-child { border-bottom: 1px solid rgba(196,98,45,0.15); border-radius: 0 0 3px 3px; }
+.route-card:hover { background: rgba(242,228,203,0.35); }
+.route-card-img { overflow: hidden; height: 180px; }
+.route-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; display: block; }
+.route-card:hover .route-card-img img { transform: scale(1.05); }
+.route-card-body { padding: 1.5rem 2rem; }
+.route-card-tag { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra); margin-bottom: 0.4rem; }
+.route-card-title { font-family: var(--serif); font-size: 1.3rem; color: var(--bark); margin-bottom: 0.5rem; }
+.route-card-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; max-width: 460px; }
+.route-card-meta { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.meta-item { text-align: center; }
+.meta-n { font-family: var(--serif); font-size: 1.2rem; color: var(--terra); line-height: 1; }
+.meta-l { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+.route-card-action { padding: 1.5rem; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; border-left: 1px solid rgba(196,98,45,0.12); min-width: 160px; }
+.route-price { font-family: var(--serif); font-size: 1.5rem; color: var(--clay); text-align: right; }
+.route-price-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+
+/* Difficulty */
+.diff-bar { display: flex; gap: 4px; align-items: center; margin-top: 0.5rem; }
+.diff-pip { width: 20px; height: 6px; border-radius: 2px; background: rgba(196,98,45,0.15); }
+.diff-pip.filled { background: var(--terra); }
+
+/* Zones */
+.zones-section { background: var(--sand); padding: 6rem 5rem; }
+.zones-timeline { position: relative; margin-top: 3rem; padding-left: 2rem; }
+.zones-timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--terra), var(--amber-pale)); }
+.zone-item { position: relative; padding: 0 0 2.5rem 2.5rem; }
+.zone-item:last-child { padding-bottom: 0; }
+.zone-dot { position: absolute; left: -2.4rem; top: 0.4rem; width: 14px; height: 14px; border-radius: 50%; background: var(--terra); border: 2px solid var(--warm-white); box-shadow: 0 0 0 2px var(--terra); }
+.zone-alt { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terra); margin-bottom: 0.3rem; }
+.zone-name { font-family: var(--serif); font-size: 1.2rem; color: var(--bark); margin-bottom: 0.4rem; }
+.zone-desc { font-size: 0.87rem; color: var(--text-muted); max-width: 480px; }
+
+/* Preparation */
+.prep-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.prep-card { background: var(--warm-white); border: 1px solid rgba(196,98,45,0.12); padding: 2rem; border-radius: 3px; }
+.prep-num { font-family: var(--serif); font-size: 2.5rem; color: rgba(196,98,45,0.18); line-height: 1; margin-bottom: 0.75rem; }
+.prep-title { font-family: var(--serif); font-size: 1.1rem; color: var(--bark); margin-bottom: 0.5rem; }
+.prep-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.75; }
+
+/* FAQ */
+.faq-section { background: var(--warm-white); }
+
+@media (max-width: 960px) {
+  .route-card { grid-template-columns: 1fr; }
+  .route-card-img { height: 200px; }
+  .route-card-action { border-left: none; border-top: 1px solid rgba(196,98,45,0.12); flex-direction: row; align-items: center; }
+  .prep-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<!-- TOPBAR -->
+<div class="topbar-strip" id="topbar">
+  <a href="https://www.tripadvisor.com" target="_blank" class="ta-badge-top">
+    <div class="ta-owl">
+      <svg viewBox="0 0 24 24" fill="none"><ellipse cx="8.5" cy="13.5" rx="2.5" ry="2.5" fill="#fff"/><ellipse cx="15.5" cy="13.5" rx="2.5" ry="2.5" fill="#fff"/><path d="M4 10C4 7 6 5 8.5 5C10 5 11.2 5.6 12 6.6C12.8 5.6 14 5 15.5 5C18 5 20 7 20 10" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="8.5" cy="13.5" r="1" fill="#34E0A1"/><circle cx="15.5" cy="13.5" r="1" fill="#34E0A1"/></svg>
+    </div>
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="ta-reviews-count">500+ Reviews</span></span>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd',event)">
+        <span id="curr-symbol">$</span><span id="curr-label">USD</span><span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" data-code="USD" onclick="setCurrency('USD',event)"><span class="tb-symbol">$</span> US Dollar</button>
+        <button class="tb-menu-item" data-code="EUR" onclick="setCurrency('EUR',event)"><span class="tb-symbol">&#8364;</span> Euro</button>
+        <button class="tb-menu-item" data-code="GBP" onclick="setCurrency('GBP',event)"><span class="tb-symbol">&#163;</span> British Pound</button>
+      </div>
+    </div>
+    <div class="tb-divider"></div>
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd',event)">
+        <img id="lang-flag-img" src="https://flagcdn.com/20x15/gb.png" alt="" style="height:12px;border-radius:1px;vertical-align:middle;margin-right:3px;">
+        <span id="lang-label">English</span><span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu" style="min-width:148px;right:0;left:auto;">
+        <button class="tb-menu-item active" data-code="en" onclick="setLang('en',event)"><img src="https://flagcdn.com/20x15/gb.png" style="height:11px;border-radius:1px;margin-right:6px;"> English</button>
+        <button class="tb-menu-item" data-code="de" onclick="setLang('de',event)"><img src="https://flagcdn.com/20x15/de.png" style="height:11px;border-radius:1px;margin-right:6px;"> Deutsch</button>
+        <button class="tb-menu-item" data-code="es" onclick="setLang('es',event)"><img src="https://flagcdn.com/20x15/es.png" style="height:11px;border-radius:1px;margin-right:6px;"> Espa&#241;ol</button>
+        <button class="tb-menu-item" data-code="ru" onclick="setLang('ru',event)"><img src="https://flagcdn.com/20x15/ru.png" style="height:11px;border-radius:1px;margin-right:6px;"> &#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="ta-reviews-count" style="color:rgba(242,228,203,0.5);font-size:0.6rem">500+ Reviews</span></span>
+    </div>
+  </a>
+
+  <!-- Right: Currency + Language -->
+  <div class="topbar-right">
+
+    <!-- Currency -->
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd', event)">
+        <span id="curr-symbol">$</span>
+        <span id="curr-label">USD</span>
+        <span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" data-code="USD" onclick="setCurrency('USD', event)">
+          <span class="tb-symbol">$</span> US Dollar
+        </button>
+        <button class="tb-menu-item" data-code="EUR" onclick="setCurrency('EUR', event)">
+          <span class="tb-symbol">&#8364;</span> Euro
+        </button>
+        <button class="tb-menu-item" data-code="GBP" onclick="setCurrency('GBP', event)">
+          <span class="tb-symbol">&#163;</span> British Pound
+        </button>
+      </div>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Language -->
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd', event)">
+        <span id="lang-flag">&#127468;&#127463;</span>
+        <span id="lang-label">English</span>
+        <span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu" style="min-width:160px;">
+        <button class="tb-menu-item active" data-code="en" onclick="setLang('en','English','&#127468;&#127463;',event)">
+          <span class="tb-flag">&#127468;&#127463;</span> English
+        </button>
+        <button class="tb-menu-item" data-code="de" onclick="setLang('de','Deutsch','&#127465;&#127466;',event)">
+          <span class="tb-flag">&#127465;&#127466;</span> Deutsch
+        </button>
+        <button class="tb-menu-item" data-code="es" onclick="setLang('es','Espa&#241;ol','&#127466;&#127480;',event)">
+          <span class="tb-flag">&#127466;&#127480;</span> Espa&#241;ol
+        </button>
+        <button class="tb-menu-item" data-code="ru" onclick="setLang('ru','&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;','&#127479;&#127482;',event)">
+          <span class="tb-flag">&#127479;&#127482;</span> &#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">★★★★★ <span style="color:rgba(242,228,203,0.5);font-size:0.6rem">500+ Reviews</span></span>
+    </div>
+  </a>
+
+  <!-- Right side: Currency + Language -->
+  <div class="topbar-right">
+
+    <!-- Currency Selector -->
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd')">
+        <span id="curr-symbol">$</span>
+        <span id="curr-label">USD</span>
+        <span class="tb-caret">▼</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" onclick="setCurrency('USD','$','USD')">
+          <span class="tb-symbol">$</span> US Dollar
+        </button>
+        <button class="tb-menu-item" onclick="setCurrency('EUR','€','EUR')">
+          <span class="tb-symbol">€</span> Euro
+        </button>
+        <button class="tb-menu-item" onclick="setCurrency('GBP','£','GBP')">
+          <span class="tb-symbol">£</span> British Pound
+        </button>
+      </div>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Language Selector -->
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd')">
+        <span class="tb-flag" id="lang-flag">🇬🇧</span>
+        <span id="lang-label">English</span>
+        <span class="tb-caret">▼</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" onclick="setLang('en','English','🇬🇧')">
+          <span class="tb-flag">🇬🇧</span> English
+        </button>
+        <button class="tb-menu-item" onclick="setLang('de','Deutsch','🇩🇪')">
+          <span class="tb-flag">🇩🇪</span> Deutsch
+        </button>
+        <button class="tb-menu-item" onclick="setLang('es','Español','🇪🇸')">
+          <span class="tb-flag">🇪🇸</span> Español
+        </button>
+        <button class="tb-menu-item" onclick="setLang('ru','Русский','🇷🇺')">
+          <span class="tb-flag">🇷🇺</span> Русский
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<nav id="nav" class="solid">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.jpg" alt="Godhope Adventure" class="nav-logo-img">
+    <span class="nav-logo-text">Godhope <em>Adventure</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="safari.html" id="nav-link-safari">Safari</a></li>
+    <li><a href="climbing.html" class="active">Climbing</a></li>
+    <li><a href="national-parks.html" id="nav-link-parks">National Parks</a></li>
+    <li><a href="about.html" id="nav-link-about">About Us</a></li>
+    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-nav" id="mob-nav">
+  <div class="mobile-nav-close" id="mob-close">&#10005;</div>
+  <img src="logo.jpg" alt="Godhope Adventure" style="width:72px;height:72px;object-fit:contain;border-radius:50%;background:var(--bark);margin-bottom:0.5rem;">
+  <a href="index.html">Home</a>
+  <a href="safari.html" id="mob-link-safari">Safari</a>
+  <a href="climbing.html" id="mob-link-climbing">Climbing</a>
+  <a href="national-parks.html" id="mob-link-parks">National Parks</a>
+  <a href="about.html" id="mob-link-about">About Us</a>
+  <a href="contact.html" id="mob-link-cta">Plan My Trip</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero" id="climbing">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=1600&q=85');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-arch"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 L0,40 Q360,0 720,30 Q1080,60 1440,20 L1440,80 Z" fill="#FDFAF4"/></svg></div>
+  <div class="page-hero-content rise d1">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>Climbing</div>
+    <h1>Mountain Climbing <em>in Tanzania</em></h1>
+    <p>From the glaciers of Kilimanjaro to the volcanic cone of Meru, reach summits that change your perspective forever.</p>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-n">5,895m</div><div class="stat-l">Kilimanjaro — Africa's Highest</div></div>
+    <div class="stat-item"><div class="stat-n">500+</div><div class="stat-l">Successful Summits Led</div></div>
+    <div class="stat-item"><div class="stat-n">6</div><div class="stat-l">Kilimanjaro Routes Offered</div></div>
+    <div class="stat-item"><div class="stat-n">100%</div><div class="stat-l">Certified Guide Team</div></div>
+  </div>
+</div>
+
+<!-- ROUTES -->
+<section class="routes-section" id="lemosho">
+  <div class="container">
+    <div class="section-eyebrow">Our Routes</div>
+    <h2 class="section-h2">Choose your <em>route to the summit</em></h2>
+    <p class="section-lead">Every route on Kilimanjaro has its own character, scenery and challenge. We'll help you match the right one to your fitness, schedule and goals.</p>
+
+    <div class="route-cards">
+
+      <div class="route-card" id="lemosho">
+        <div class="route-card-img"><img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&q=75" alt="Lemosho" loading="lazy"></div>
+        <div class="route-card-body">
+          <div class="route-card-tag">★ Most Recommended · Best Acclimatisation</div>
+          <div class="route-card-title">Lemosho Route</div>
+          <div class="route-card-desc">The most scenic and scenic of all routes, entering from the western side through untouched forest. Longer days allow superior acclimatisation and a higher summit success rate. Ideal for first-timers.</div>
+          <div class="route-card-meta">
+            <div class="meta-item"><div class="meta-n">7–8</div><div class="meta-l">Days</div></div>
+            <div class="meta-item"><div class="meta-n">5,895m</div><div class="meta-l">Summit</div></div>
+            <div class="meta-item">
+              <div class="meta-l" style="margin-bottom:4px;">Difficulty</div>
+              <div class="diff-bar"><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip"></div><div class="diff-pip"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="route-card-action">
+          <div><div class="route-price-label">from</div><div class="route-price"><span class="price-amount" data-price-usd="2800">$2,800</span></div></div>
+          <a href="tour-detail.html" class="btn-primary" style="margin-top:1rem;">View Route</a>
+        </div>
+      </div>
+
+      <div class="route-card" id="machame">
+        <div class="route-card-img"><img src="https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=600&q=75" alt="Machame" loading="lazy"></div>
+        <div class="route-card-body">
+          <div class="route-card-tag">Most Popular · Scenic &amp; Challenging</div>
+          <div class="route-card-title">Machame Route</div>
+          <div class="route-card-desc">Known as the "Whiskey Route," Machame is steep, dramatic and beautiful. It approaches the summit from the southern face and offers spectacular views of the Shira Plateau. Popular with experienced trekkers.</div>
+          <div class="route-card-meta">
+            <div class="meta-item"><div class="meta-n">6–7</div><div class="meta-l">Days</div></div>
+            <div class="meta-item"><div class="meta-n">5,895m</div><div class="meta-l">Summit</div></div>
+            <div class="meta-item">
+              <div class="meta-l" style="margin-bottom:4px;">Difficulty</div>
+              <div class="diff-bar"><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="route-card-action">
+          <div><div class="route-price-label">from</div><div class="route-price"><span class="price-amount" data-price-usd="2550">$2,550</span></div></div>
+          <a href="tour-detail.html" class="btn-primary" style="margin-top:1rem;">View Route</a>
+        </div>
+      </div>
+
+      <div class="route-card" id="rongai">
+        <div class="route-card-img"><img src="https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?w=600&q=75" alt="Rongai" loading="lazy"></div>
+        <div class="route-card-body">
+          <div class="route-card-tag">Only Northern Route · Quieter Trails</div>
+          <div class="route-card-title">Rongai Route</div>
+          <div class="route-card-desc">The only route approaching from the north, near the Kenyan border. Drier and less crowded, with excellent wildlife sightings in the lower forests. Great for the dry season and a gentler overall gradient.</div>
+          <div class="route-card-meta">
+            <div class="meta-item"><div class="meta-n">6–7</div><div class="meta-l">Days</div></div>
+            <div class="meta-item"><div class="meta-n">5,895m</div><div class="meta-l">Summit</div></div>
+            <div class="meta-item">
+              <div class="meta-l" style="margin-bottom:4px;">Difficulty</div>
+              <div class="diff-bar"><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip"></div><div class="diff-pip"></div><div class="diff-pip"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="route-card-action">
+          <div><div class="route-price-label">from</div><div class="route-price"><span class="price-amount" data-price-usd="2500">$2,500</span></div></div>
+          <a href="tour-detail.html" class="btn-primary" style="margin-top:1rem;">View Route</a>
+        </div>
+      </div>
+
+      <div class="route-card" id="northern-circuit">
+        <div class="route-card-img"><img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=75" alt="Northern Circuit" loading="lazy"></div>
+        <div class="route-card-body">
+          <div class="route-card-tag">Highest Success Rate · Most Remote</div>
+          <div class="route-card-title">Northern Circuit</div>
+          <div class="route-card-desc">The longest and most remote route, circumnavigating the entire northern face. Exceptional acclimatisation profile translates into the highest summit success rate of all routes. A true wilderness experience.</div>
+          <div class="route-card-meta">
+            <div class="meta-item"><div class="meta-n">8–9</div><div class="meta-l">Days</div></div>
+            <div class="meta-item"><div class="meta-n">5,895m</div><div class="meta-l">Summit</div></div>
+            <div class="meta-item">
+              <div class="meta-l" style="margin-bottom:4px;">Difficulty</div>
+              <div class="diff-bar"><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip"></div><div class="diff-pip"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="route-card-action">
+          <div><div class="route-price-label">from</div><div class="route-price"><span class="price-amount" data-price-usd="3200">$3,200</span></div></div>
+          <a href="tour-detail.html" class="btn-primary" style="margin-top:1rem;">View Route</a>
+        </div>
+      </div>
+
+      <div class="route-card" id="meru">
+        <div class="route-card-img"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&q=75" alt="Mount Meru" loading="lazy"></div>
+        <div class="route-card-body">
+          <div class="route-card-tag">Africa's 5th Highest · Excellent Acclimatisation</div>
+          <div class="route-card-title">Mount Meru</div>
+          <div class="route-card-desc">At 4,562m, Meru is a spectacular climb in its own right and an excellent warm-up for Kilimanjaro. Located inside Arusha National Park, the route passes through rich forest and offers dramatic views of Kili on a clear day.</div>
+          <div class="route-card-meta">
+            <div class="meta-item"><div class="meta-n">4</div><div class="meta-l">Days</div></div>
+            <div class="meta-item"><div class="meta-n">4,562m</div><div class="meta-l">Summit</div></div>
+            <div class="meta-item">
+              <div class="meta-l" style="margin-bottom:4px;">Difficulty</div>
+              <div class="diff-bar"><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip filled"></div><div class="diff-pip"></div><div class="diff-pip"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="route-card-action">
+          <div><div class="route-price-label">from</div><div class="route-price"><span class="price-amount" data-price-usd="1100">$1,100</span></div></div>
+          <a href="tour-detail.html" class="btn-primary" style="margin-top:1rem;">View Route</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ECOLOGICAL ZONES -->
+<section class="zones-section">
+  <div class="container">
+    <div class="grid-2" style="align-items:start;">
+      <div>
+        <div class="section-eyebrow">The Journey</div>
+        <h2 class="section-h2">Five worlds in <em>one mountain</em></h2>
+        <p class="section-lead">Climbing Kilimanjaro is like travelling from the equator to the Arctic in a few days. You pass through five distinct ecological zones, each with its own climate, vegetation and wildlife.</p>
+        <div class="zones-timeline" style="margin-top:2.5rem;">
+          <div class="zone-item">
+            <div class="zone-dot"></div>
+            <div class="zone-alt">800m – 1,800m</div>
+            <div class="zone-name">Cultivation Zone</div>
+            <div class="zone-desc">Farmland and villages on the lower slopes. Coffee and banana plantations with panoramic views back to the plains.</div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-dot"></div>
+            <div class="zone-alt">1,800m – 2,800m</div>
+            <div class="zone-name">Montane Forest</div>
+            <div class="zone-desc">Dense tropical rainforest alive with colobus monkeys, exotic birds and wild flowers. Cool and shaded — often misty.</div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-dot"></div>
+            <div class="zone-alt">2,800m – 4,000m</div>
+            <div class="zone-name">Heath &amp; Moorland</div>
+            <div class="zone-desc">Giant heather and towering lobelia plants. Open views in every direction. Spectacular sunrises and sunsets.</div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-dot"></div>
+            <div class="zone-alt">4,000m – 5,000m</div>
+            <div class="zone-name">Alpine Desert</div>
+            <div class="zone-desc">A barren, moon-like landscape of rock and dust. Temperatures can swing wildly — daytime sun, freezing nights.</div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-dot"></div>
+            <div class="zone-alt">5,000m – 5,895m</div>
+            <div class="zone-name">Arctic Summit Zone</div>
+            <div class="zone-desc">Ice fields, glaciers and the Uhuru Peak sign. The most rewarding few steps you'll ever take.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="split-img-frame" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=800&q=80" alt="Kilimanjaro zones" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREPARATION -->
+<section style="background: var(--sand-light);">
+  <div class="container">
+    <div class="section-eyebrow">Getting Ready</div>
+    <h2 class="section-h2">How to <em>prepare for the climb</em></h2>
+    <p class="section-lead">Kilimanjaro is a non-technical climb, but physical preparation and the right mindset make an enormous difference to your summit success.</p>
+    <div class="prep-grid">
+      <div class="prep-card"><div class="prep-num">01</div><div class="prep-title">Cardiovascular Fitness</div><div class="prep-text">Begin cardio training 3–4 months before your trip. Running, cycling, hiking and stair climbing are all excellent. Aim for 4–5 sessions per week of increasing intensity. Include weekend hikes carrying a loaded pack.</div></div>
+      <div class="prep-card"><div class="prep-num">02</div><div class="prep-title">Choose the Right Route</div><div class="prep-text">Longer routes give your body more time to acclimatise, dramatically improving your summit success rate. We always recommend the Lemosho or Northern Circuit for first-timers. Don't rush Kilimanjaro.</div></div>
+      <div class="prep-card"><div class="prep-num">03</div><div class="prep-title">Packing &amp; Gear</div><div class="prep-text">You'll experience every temperature from tropical heat to -15°C. Layering is key. We provide a detailed packing list on booking and can arrange quality sleeping bag and jacket hire in Arusha to save luggage weight.</div></div>
+      <div class="prep-card"><div class="prep-num">04</div><div class="prep-title">Altitude Awareness</div><div class="prep-text">Altitude sickness affects everyone differently, regardless of fitness. Our guides monitor every climber twice daily with pulse oximeters. The key rule: pole pole (slowly slowly). We never rush acclimatisation.</div></div>
+    </div>
+    <div class="info-box" style="margin-top:2rem;">
+      <p>💡 <strong>Tip from our guides:</strong> The single biggest factor in summit success is not fitness — it's the time you allow for acclimatisation. Choose a 7-day or longer route and your chances of standing at Uhuru Peak rise dramatically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="grid-2" style="gap:5rem;align-items:start;">
+      <div>
+        <div class="section-eyebrow">FAQ</div>
+        <h2 class="section-h2">Common <em>questions</em></h2>
+        <p class="section-lead">Everything you need to know before booking your Kilimanjaro climb.</p>
+        <a href="contact.html" class="btn-primary" style="margin-top:2rem;">Ask Us Anything →</a>
+      </div>
+      <div>
+        <div class="accordion-item open">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">Do I need climbing experience?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body" style="max-height:300px;"><div class="accordion-body-inner">No technical climbing experience is required for any of the standard Kilimanjaro routes. It is a trek, not a climb in the mountaineering sense. What you do need is good physical fitness, mental resilience and the ability to walk for 6–8 hours per day on rough terrain.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">What is the summit success rate?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">Our overall summit success rate is above 85%, significantly higher than the industry average of around 65%. The main reasons are our experienced guides, careful acclimatisation planning, and our recommendation of longer routes.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">What is included in the climb price?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">All climbs include: park and conservation fees, certified mountain guides, porters, cooks, all camping equipment (tents, dining tent, portable toilets), all meals on the mountain, and emergency oxygen. International flights and personal travel insurance are not included.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">How cold does it get at the summit?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">Temperatures at Uhuru Peak (5,895m) can drop to -20°C or below, especially during the summit night push which typically begins around midnight. Wind chill makes it feel even colder. A good-quality down jacket, insulated trousers, gloves and a balaclava are essential — we provide a full gear list on booking.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">Can I combine Kilimanjaro with a safari?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">Absolutely — and we highly recommend it. Most climbers add a 3–5 day safari after the mountain to celebrate the summit and rest their legs. We can arrange seamless transfers from the mountain gate to your safari camp. See our combined packages for the best value itineraries.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg" style="background-image: url('https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=1600&q=80');"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Begin Your Expedition</div>
+    <h2 class="cta-h2">The summit is <em>waiting for you</em></h2>
+    <p class="cta-p">Tell us your preferred dates and route and we'll put together a personalised climb plan within 24 hours.</p>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-light" data-i18n="plan_climb">Plan My Climb →</a>
+      <a href="about.html" class="btn-outline-light" data-i18n="meet_guides">Meet Our Guides</a>
+    </div>
+  </div>
+</section>
+
+
+<script>
+function toggleAcc(btn) {
+  const item = btn.closest('.accordion-item');
+  const body = item.querySelector('.accordion-body');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.accordion-item').forEach(i => { i.classList.remove('open'); i.querySelector('.accordion-body').style.maxHeight = '0'; });
+  if (!isOpen) { item.classList.add('open'); body.style.maxHeight = body.querySelector('.accordion-body-inner').scrollHeight + 'px'; }
+}
+document.querySelectorAll('.accordion-item.open').forEach(item => {
+  item.querySelector('.accordion-body').style.maxHeight = item.querySelector('.accordion-body-inner').scrollHeight + 'px';
+});
+</script>
+
+
+<div class="contact-strip">
+  <p class="contact-strip-copy"><strong>Ready to talk?</strong> Our team is available 7 days a week.</p>
+  <div class="contact-chips">
+    <a href="/cdn-cgi/l/email-protection#bed6dbd2d2d1fecddfc8dfd0d0dfdfd0dacdcbd3d3d7ca90ddd190cac4" class="chip">&#9993; <span class="__cf_email__" data-cfemail="e78f828b8b88a79486918689898686898394928a8a8e93c98488c9939d">[email&#160;protected]</span></a>
+    <a href="tel:+255000000000" class="chip">&#9990; +255 000 000 000</a>
+    <a href="https://wa.me/255000000000" class="chip">WhatsApp</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-logo footer-logo-img-wrap">
+      <img src="logo.jpg" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
+      <span>Godhope <em style="font-style:italic;">Adventure</em></span>
+    </a>
+      <p class="footer-about"><span data-i18n="footer_about">Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Arusha. Adventure Without Limits.</span></p>
+      <div class="footer-socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">fb</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Safari</h5>
+      <ul>
+        <li><a href="safari.html">Safari Overview</a></li>
+        <li><a href="national-parks.html">National Parks</a></li>
+        <li><a href="safari.html">Private Safari</a></li>
+        <li><a href="safari.html">Group Safari</a></li>
+        <li><a href="safari.html">Great Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Climbing</h5>
+      <ul>
+        <li><a href="climbing.html">Climbing Overview</a></li>
+        <li><a href="climbing.html">Lemosho Route</a></li>
+        <li><a href="climbing.html">Machame Route</a></li>
+        <li><a href="climbing.html">Mount Meru</a></li>
+        <li><a href="climbing.html">Climbing FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Our Guides</a></li>
+        <li><a href="about.html">Conservation</a></li>
+        <li><a href="about.html">Reviews</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Godhope Adventure. All rights reserved. &middot; Arusha, Tanzania</span>
+    <div class="footer-certs">
+      <span class="cert">Licensed Tour Operator</span>
+      <span class="cert">Tanzania Tourism Board</span>
+    </div>
+  </div>
+</footer>
+<a href="https://wa.me/255000000000" class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>
+  <span class="wa-float-label">Chat with us</span>
+</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+  var ham = document.getElementById('ham');
+  var mob = document.getElementById('mob-nav');
+  var cls = document.getElementById('mob-close');
+  if(ham) ham.addEventListener('click', function(){ mob.classList.add('open'); });
+  if(cl
+<script>
+/* GHA Topbar v4 — Currency + Language */
+var GHA_T={
+en:{nav_safari:'Safari',nav_climbing:'Climbing',nav_parks:'National Parks',nav_about:'About Us',nav_cta:'Plan My Trip',hero_eyebrow:'Adventure Without Limits',hero_sub:"Expert-guided wildlife safaris through Tanzania's national parks and mountain expeditions — from the Serengeti to the summit of Kilimanjaro.",browse_tours:'Browse Our Tours →',how_we_work:'How we work',explore_safari:'Explore Safari Packages →',view_routes:'View All Routes →',view_packages:'View All Packages →',plan_trip:'Plan My Trip →',plan_safari:'Plan My Safari →',plan_climb:'Plan My Climb →',meet_guides:'Meet Our Guides',explore_parks:'Explore All Parks',send_enquiry:'Send My Enquiry →',whatsapp_us:'WhatsApp Us',book_tour:'Book This Safari →',request_quote:'Request a Quote',contact_ready:'Ready to talk?',contact_avail:'Our team is available 7 days a week.',footer_about:'Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Arusha. Adventure Without Limits.',ta_rank:'Ranked #1 on TripAdvisor',ta_reviews:'500+ Reviews',from_label:'from'},
+de:{nav_safari:'Safari',nav_climbing:'Bergsteigen',nav_parks:'Nationalparks',nav_about:'Über uns',nav_cta:'Reise planen',hero_eyebrow:'Abenteuer ohne Grenzen',hero_sub:'Expertgeführte Wildsafaris und Bergexpeditionen in Tansania — vom Serengeti bis zum Kilimandscharo.',browse_tours:'Touren entdecken →',how_we_work:'Wie wir arbeiten',explore_safari:'Safari-Pakete →',view_routes:'Alle Routen →',view_packages:'Alle Pakete →',plan_trip:'Reise planen →',plan_safari:'Safari planen →',plan_climb:'Aufstieg planen →',meet_guides:'Unsere Guides',explore_parks:'Alle Parks',send_enquiry:'Anfrage senden →',whatsapp_us:'WhatsApp schreiben',book_tour:'Safari buchen →',request_quote:'Angebot anfordern',contact_ready:'Bereit zu reden?',contact_avail:'Unser Team ist 7 Tage erreichbar.',footer_about:'Godhope Adventure — Ihr Reiseveranstalter für Tansania. Mit Sitz in Arusha.',ta_rank:'#1 auf TripAdvisor',ta_reviews:'500+ Bewertungen',from_label:'ab'},
+es:{nav_safari:'Safari',nav_climbing:'Escalada',nav_parks:'Parques Nacionales',nav_about:'Sobre Nosotros',nav_cta:'Planifica tu viaje',hero_eyebrow:'Aventura Sin Límites',hero_sub:'Safaris y expediciones de montaña con guías expertos en Tanzania.',browse_tours:'Ver nuestros tours →',how_we_work:'Cómo trabajamos',explore_safari:'Explorar safaris →',view_routes:'Todas las rutas →',view_packages:'Todos los paquetes →',plan_trip:'Planifica tu viaje →',plan_safari:'Planifica tu safari →',plan_climb:'Planifica tu ascenso →',meet_guides:'Nuestros guías',explore_parks:'Todos los parques',send_enquiry:'Enviar consulta →',whatsapp_us:'Escríbenos',book_tour:'Reservar safari →',request_quote:'Solicitar presupuesto',contact_ready:'¿Listo para hablar?',contact_avail:'Disponibles los 7 días.',footer_about:'Godhope Adventure — operador de confianza en Tanzania. Sede en Arusha.',ta_rank:'#1 en TripAdvisor',ta_reviews:'500+ Reseñas',from_label:'desde'},
+ru:{nav_safari:'Сафари',nav_climbing:'Восхождения',nav_parks:'Нац. парки',nav_about:'О нас',nav_cta:'Планировать',hero_eyebrow:'Приключения без границ',hero_sub:'Профессиональные сафари и восхождения в Танзании.',browse_tours:'Смотреть туры →',how_we_work:'Как мы работаем',explore_safari:'Пакеты сафари →',view_routes:'Все маршруты →',view_packages:'Все пакеты →',plan_trip:'Планировать →',plan_safari:'План. сафари →',plan_climb:'План. восхождение →',meet_guides:'Наши гиды',explore_parks:'Все парки',send_enquiry:'Отправить запрос →',whatsapp_us:'WhatsApp',book_tour:'Забронировать →',request_quote:'Запросить расчёт',contact_ready:'Готовы?',contact_avail:'Команда доступна 7 дней.',footer_about:'Godhope Adventure — надёжный оператор Танзании. Офис в Аруше.',ta_rank:'#1 на TripAdvisor',ta_reviews:'500+ отзывов',from_label:'от'}
+};
+var GHA_RATES={USD:1,EUR:0.92,GBP:0.79};
+var GHA_SYM={USD:'$',EUR:'\u20ac',GBP:'\u00a3'};
+var GHA_LANGS={en:{label:'English',flag:'gb'},de:{label:'Deutsch',flag:'de'},es:{label:'Espa\u00f1ol',flag:'es'},ru:{label:'\u0420\u0443\u0441\u0441\u043a\u0438\u0439',flag:'ru'}};
+var _cur=localStorage.getItem('gha_cur')||'USD';
+var _lang=localStorage.getItem('gha_lang')||'en';
+
+function toggleDD(id,ev){
+  ev.stopPropagation();
+  var dd=document.getElementById(id);
+  var was=dd.classList.contains('open');
+  document.querySelectorAll('.tb-dropdown').forEach(function(d){d.classList.remove('open');});
+  if(!was)dd.classList.add('open');
+}
+document.addEventListener('click',function(){
+  document.querySelectorAll('.tb-dropdown').forEach(function(d){d.classList.remove('open');});
+});
+
+function setCurrency(code,ev){
+  ev.stopPropagation();
+  _cur=code;
+  localStorage.setItem('gha_cur',code);
+  document.querySelectorAll('#curr-dd .tb-menu-item').forEach(function(b){b.classList.toggle('active',b.dataset.code===code);});
+  document.getElementById('curr-dd').classList.remove('open');
+  _renderCur();
+}
+function _renderCur(){
+  var sym=GHA_SYM[_cur]||'$';
+  var rate=GHA_RATES[_cur]||1;
+  var t=GHA_T[_lang]||GHA_T.en;
+  var se=document.getElementById('curr-symbol');
+  var le=document.getElementById('curr-label');
+  if(se)se.textContent=sym;
+  if(le)le.textContent=_cur;
+  document.querySelectorAll('.price-amount[data-price-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-price-usd'));
+    el.textContent=sym+Math.round(usd*rate).toLocaleString();
+  });
+  document.querySelectorAll('.price-from-label').forEach(function(el){
+    el.textContent=(t.from_label||'from')+' ';
+  });
+}
+
+function setLang(code,ev){
+  ev.stopPropagation();
+  _lang=code;
+  localStorage.setItem('gha_lang',code);
+  document.querySelectorAll('#lang-dd .tb-menu-item').forEach(function(b){b.classList.toggle('active',b.dataset.code===code);});
+  document.getElementById('lang-dd').classList.remove('open');
+  _renderLang();
+}
+function _renderLang(){
+  var t=GHA_T[_lang]||GHA_T.en;
+  var info=GHA_LANGS[_lang]||GHA_LANGS.en;
+  var lbl=document.getElementById('lang-label');
+  var flg=document.getElementById('lang-flag-img');
+  if(lbl)lbl.textContent=info.label;
+  if(flg)flg.src='https://flagcdn.com/20x15/'+info.flag+'.png';
+  document.documentElement.lang=_lang;
+  /* Nav + mobile nav */
+  var nm={'nav-link-safari':t.nav_safari,'nav-link-climbing':t.nav_climbing,'nav-link-parks':t.nav_parks,'nav-link-about':t.nav_about,'nav-link-cta':t.nav_cta,'mob-link-safari':t.nav_safari,'mob-link-climbing':t.nav_climbing,'mob-link-parks':t.nav_parks,'mob-link-about':t.nav_about,'mob-link-cta':t.nav_cta};
+  Object.keys(nm).forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=nm[id];});
+  /* TripAdvisor */
+  var tr=document.querySelector('.ta-rank');var tv=document.querySelector('.ta-reviews-count');
+  if(tr)tr.textContent=t.ta_rank;if(tv)tv.textContent=t.ta_reviews;
+  /* All data-i18n elements */
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');if(t[k]!==undefined)el.textContent=t[k];
+  });
+  _renderCur();
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var info=GHA_LANGS[_lang]||GHA_LANGS.en;
+  var flg=document.getElementById('lang-flag-img');
+  if(flg)flg.src='https://flagcdn.com/20x15/'+info.flag+'.png';
+  document.querySelectorAll('#curr-dd .tb-menu-item').forEach(function(b){b.classList.toggle('active',b.dataset.code===_cur);});
+  document.querySelectorAll('#lang-dd .tb-menu-item').forEach(function(b){b.classList.toggle('active',b.dataset.code===_lang);});
+  _renderCur();
+  if(_lang!=='en')_renderLang();
+});
+</script>
+</body>
+</html>
