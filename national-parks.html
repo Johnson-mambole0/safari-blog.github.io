@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National Parks | Godhope Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.parks-list-section { background: var(--warm-white); }
+.park-entry {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; margin-bottom: 0;
+  border: 1px solid rgba(196,98,45,0.12);
+  border-bottom: none; overflow: hidden;
+}
+.park-entry:first-child { border-radius: 3px 3px 0 0; }
+.park-entry:last-child { border-bottom: 1px solid rgba(196,98,45,0.12); border-radius: 0 0 3px 3px; }
+.park-entry.flip { direction: rtl; }
+.park-entry.flip > * { direction: ltr; }
+.park-entry-img { position: relative; min-height: 380px; overflow: hidden; }
+.park-entry-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: transform 0.6s; }
+.park-entry:hover .park-entry-img img { transform: scale(1.04); }
+.park-badge {
+  position: absolute; top: 1.5rem; left: 1.5rem;
+  background: rgba(253,250,244,0.92); border: 1px solid rgba(196,98,45,0.25);
+  padding: 0.4rem 0.9rem; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terra);
+  backdrop-filter: blur(8px);
+}
+.park-entry-body { padding: 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; background: var(--warm-white); }
+.park-entry.flip .park-entry-body { background: var(--sand-light); }
+.park-num { font-family: var(--serif); font-size: 4rem; color: rgba(196,98,45,0.1); line-height: 1; margin-bottom: 0.5rem; }
+.park-name { font-family: var(--serif); font-size: 2rem; color: var(--bark); margin-bottom: 0.75rem; line-height: 1.1; }
+.park-name em { font-style: italic; color: var(--clay); }
+.park-desc { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 1.5rem; }
+.park-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+.highlight-pill { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--terra); background: rgba(196,98,45,0.08); padding: 0.3rem 0.75rem; border-radius: 50px; }
+.park-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+.pmeta-item { }
+.pmeta-n { font-family: var(--serif); font-size: 1.3rem; color: var(--terra); line-height: 1; }
+.pmeta-l { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+
+/* Map placeholder */
+.map-section { background: var(--sand); padding: 6rem 5rem; }
+.map-placeholder {
+  background: var(--sand-mid); border: 1px solid rgba(196,98,45,0.2);
+  height: 480px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  margin-top: 3rem; overflow: hidden; position: relative;
+}
+.map-placeholder img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+.map-overlay-text { position: absolute; text-align: center; }
+.map-overlay-text h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--bark); }
+.map-overlay-text p { font-size: 0.9rem; color: var(--text-mid); margin-top: 0.5rem; }
+
+@media (max-width: 960px) {
+  .park-entry, .park-entry.flip { grid-template-columns: 1fr; direction: ltr; }
+  .park-entry-img { min-height: 260px; }
+  .park-entry-body { padding: 2rem 1.5rem; }
+  .map-section { padding: 4rem 1.5rem; }
+  .map-placeholder { height: 300px; }
+}
+</style>
+<style>
+/* ─── GHA Topbar ─── */
+.gha-topbar{background:var(--bark);color:rgba(242,228,203,.7);font-family:var(--sans);font-size:.78rem;letter-spacing:.06em;position:relative;z-index:600}
+.gha-topbar-inner{max-width:1400px;margin:0 auto;padding:.5rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.gha-topbar-brand{font-style:italic;color:var(--amber-pale);white-space:nowrap;font-size:.75rem}
+.gha-topbar-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+
+/* Google Translate override — keep it minimal */
+.goog-te-banner-frame{display:none!important}
+body{top:0!important}
+.goog-te-gadget{font-family:var(--sans)!important;color:rgba(242,228,203,.7)!important;font-size:.75rem!important}
+.goog-te-gadget select{background:transparent;border:1px solid rgba(242,228,203,.2);color:rgba(242,228,203,.85);font-family:var(--sans);font-size:.73rem;padding:.25rem .4rem;border-radius:2px;cursor:pointer;outline:none}
+.goog-te-gadget select:focus{border-color:var(--amber-pale)}
+.goog-logo-link{display:none!important}
+.goog-te-gadget span{display:none!important}
+
+/* Currency switcher */
+.gha-currency{position:relative}
+.gha-cur-btn{background:transparent;border:1px solid rgba(242,228,203,.2);color:rgba(242,228,203,.85);font-family:var(--sans);font-size:.73rem;padding:.25rem .65rem;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s;white-space:nowrap}
+.gha-cur-btn:hover{border-color:var(--amber-pale);color:var(--amber-pale)}
+.gha-cur-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--bark);border:1px solid rgba(242,228,203,.15);min-width:220px;z-index:700;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none}
+.gha-cur-dropdown.open{display:block}
+.gha-cur-dropdown button{display:block;width:100%;background:none;border:none;padding:.65rem 1rem;color:rgba(242,228,203,.7);font-family:var(--sans);font-size:.8rem;text-align:left;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+.gha-cur-dropdown button:hover{background:rgba(242,228,203,.08);color:var(--amber-pale)}
+
+/* Adjust nav top to account for topbar */
+nav{top:0}
+@media(max-width:960px){
+  .gha-topbar-inner{padding:.5rem 1.25rem}
+  .gha-topbar-brand{display:none}
+  nav{padding:1rem 1.25rem!important}
+  nav.scrolled,nav.solid{padding:.75rem 1.25rem!important}
+  .nav-links{display:none!important}
+  .hamburger{display:flex!important}
+  .mob-nav-logo{width:72px;height:72px;object-fit:contain;border-radius:50%;background:var(--bark);display:block;margin-bottom:.25rem}
+  .mobile-nav img.mob-nav-logo{display:block}
+}
+</style>
+
+
+<!-- Google Translate -->
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'en,fr,de,es,it,zh-CN,ar,sw,ko,ja,pt,ru',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+var _rates={USD:1,EUR:.92,GBP:.79,TZS:2650,KES:130,AUD:1.53,CAD:1.36,ZAR:18.5};
+var _sym={USD:'$',EUR:'€',GBP:'£',TZS:'TSh',KES:'KSh',AUD:'A$',CAD:'C$',ZAR:'R'};
+var _cur=localStorage.getItem('gha_currency')||'USD';
+
+function setCurrency(code,sym){
+  _cur=code;localStorage.setItem('gha_currency',code);
+  document.getElementById('gha-cur-label').textContent=sym+' '+code;
+  document.getElementById('gha-cur-dropdown').classList.remove('open');
+  // Pattern 1: data-usd on container
+  document.querySelectorAll('[data-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-usd'));
+    var v=Math.round(usd*_rates[code]);
+    // Update child <sup> + text node
+    el.innerHTML=el.innerHTML.replace(/[€£A$C$TSh KSh R$]+[\d,]+/, sym+v.toLocaleString());
+    // simpler: just replace the number text node
+    var nodes=el.childNodes;
+    for(var i=0;i<nodes.length;i++){
+      if(nodes[i].nodeType===3 && nodes[i].textContent.match(/[\d,]+/)){
+        nodes[i].textContent=v.toLocaleString();
+      }
+    }
+    // Update sup
+    var sup=el.querySelector('sup');
+    if(sup) sup.textContent='from '+sym;
+  });
+  // Pattern 2: data-price-usd on span
+  document.querySelectorAll('[data-price-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-price-usd'));
+    var v=Math.round(usd*_rates[code]);
+    el.textContent=sym+v.toLocaleString();
+    // Update sibling sup
+    var sup=el.parentElement && el.parentElement.querySelector('sup');
+    if(sup) sup.textContent='from ';
+  });
+  // Pattern 3: sidebar-price / route-price
+  document.querySelectorAll('.sidebar-price').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-usd')||0);
+    if(usd){
+      var v=Math.round(usd*_rates[code]);
+      el.innerHTML='<sup>from '+sym+'</sup>'+v.toLocaleString();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  if(_cur!=='USD'){ var sym=_sym[_cur]||'$'; setCurrency(_cur,sym); }
+  var toggle=document.getElementById('gha-cur-toggle');
+  var dropdown=document.getElementById('gha-cur-dropdown');
+  if(toggle&&dropdown){
+    toggle.addEventListener('click',function(e){e.stopPropagation();dropdown.classList.toggle('open');});
+    document.addEventListener('click',function(){dropdown.classList.remove('open');});
+  }
+});
+</script>
+</head>
+<body>
+<div class="mobile-nav" id="mob-nav">
+  <button class="mobile-nav-close" id="mob-close">&#10005;</button>
+  <img src="logo.jpg" alt="Godhope Adventure" class="mob-nav-logo">
+  <a href="index.html">Home</a>
+  <a href="safari.html">Safari</a>
+  <a href="climbing.html">Climbing</a>
+  <a href="national-parks.html" class="active">National Parks</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Plan My Trip</a>
+</div>
+<div class="gha-topbar">
+  <div class="gha-topbar-inner">
+    <span class="gha-topbar-brand">Adventure Without Limits</span>
+    <div class="gha-topbar-controls">
+      <div id="google_translate_element"></div>
+      <div class="gha-currency" id="gha-currency">
+        <button class="gha-cur-btn" id="gha-cur-toggle">
+          <span id="gha-cur-label">$ USD</span>
+          <svg width="10" height="6" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z" fill="currentColor"/></svg>
+        </button>
+        <div class="gha-cur-dropdown" id="gha-cur-dropdown">
+          <button onclick="setCurrency('USD','$')">$ USD — US Dollar</button>
+          <button onclick="setCurrency('EUR','€')">€ EUR — Euro</button>
+          <button onclick="setCurrency('GBP','£')">£ GBP — British Pound</button>
+          <button onclick="setCurrency('TZS','TSh')">TSh TZS — Tanzanian Shilling</button>
+          <button onclick="setCurrency('KES','KSh')">KSh KES — Kenyan Shilling</button>
+          <button onclick="setCurrency('AUD','A$')">A$ AUD — Australian Dollar</button>
+          <button onclick="setCurrency('CAD','C$')">C$ CAD — Canadian Dollar</button>
+          <button onclick="setCurrency('ZAR','R')">R ZAR — South African Rand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- TOPBAR -->
+<div class="topbar-strip" id="topbar">
+  <a href="https://www.tripadvisor.com" target="_blank" class="ta-badge-top">
+    <div class="ta-owl">
+      <svg viewBox="0 0 24 24" fill="none"><ellipse cx="8.5" cy="13.5" rx="2.5" ry="2.5" fill="#fff"/><ellipse cx="15.5" cy="13.5" rx="2.5" ry="2.5" fill="#fff"/><path d="M4 10C4 7 6 5 8.5 5C10 5 11.2 5.6 12 6.6C12.8 5.6 14 5 15.5 5C18 5 20 7 20 10" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="8.5" cy="13.5" r="1" fill="#34E0A1"/><circle cx="15.5" cy="13.5" r="1" fill="#34E0A1"/></svg>
+    </div>
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="ta-reviews-count">500+ Reviews</span></span>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd',event)">
+        <span id="curr-symbol">$</span><span id="curr-label">USD</span><span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" data-code="USD" onclick="setCurrency('USD',event)"><span class="tb-symbol">$</span> US Dollar</button>
+        <button class="tb-menu-item" data-code="EUR" onclick="setCurrency('EUR',event)"><span class="tb-symbol">&#8364;</span> Euro</button>
+        <button class="tb-menu-item" data-code="GBP" onclick="setCurrency('GBP',event)"><span class="tb-symbol">&#163;</span> British Pound</button>
+      </div>
+    </div>
+    <div class="tb-divider"></div>
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd',event)">
+        <img id="lang-flag-img" src="https://flagcdn.com/20x15/gb.png" alt="" style="height:12px;border-radius:1px;vertical-align:middle;margin-right:3px;">
+        <span id="lang-label">English</span><span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu" style="min-width:148px;right:0;left:auto;">
+        <button class="tb-menu-item active" data-code="en" onclick="setLang('en',event)"><img src="https://flagcdn.com/20x15/gb.png" style="height:11px;border-radius:1px;margin-right:6px;"> English</button>
+        <button class="tb-menu-item" data-code="de" onclick="setLang('de',event)"><img src="https://flagcdn.com/20x15/de.png" style="height:11px;border-radius:1px;margin-right:6px;"> Deutsch</button>
+        <button class="tb-menu-item" data-code="es" onclick="setLang('es',event)"><img src="https://flagcdn.com/20x15/es.png" style="height:11px;border-radius:1px;margin-right:6px;"> Espa&#241;ol</button>
+        <button class="tb-menu-item" data-code="ru" onclick="setLang('ru',event)"><img src="https://flagcdn.com/20x15/ru.png" style="height:11px;border-radius:1px;margin-right:6px;"> &#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="ta-reviews-count" style="color:rgba(242,228,203,0.5);font-size:0.6rem">500+ Reviews</span></span>
+    </div>
+  </a>
+
+  <!-- Right: Currency + Language -->
+  <div class="topbar-right">
+
+    <!-- Currency -->
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd', event)">
+        <span id="curr-symbol">$</span>
+        <span id="curr-label">USD</span>
+        <span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" data-code="USD" onclick="setCurrency('USD', event)">
+          <span class="tb-symbol">$</span> US Dollar
+        </button>
+        <button class="tb-menu-item" data-code="EUR" onclick="setCurrency('EUR', event)">
+          <span class="tb-symbol">&#8364;</span> Euro
+        </button>
+        <button class="tb-menu-item" data-code="GBP" onclick="setCurrency('GBP', event)">
+          <span class="tb-symbol">&#163;</span> British Pound
+        </button>
+      </div>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Language -->
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd', event)">
+        <span id="lang-flag">&#127468;&#127463;</span>
+        <span id="lang-label">English</span>
+        <span class="tb-caret">&#9660;</span>
+      </button>
+      <div class="tb-menu" style="min-width:160px;">
+        <button class="tb-menu-item active" data-code="en" onclick="setLang('en','English','&#127468;&#127463;',event)">
+          <span class="tb-flag">&#127468;&#127463;</span> English
+        </button>
+        <button class="tb-menu-item" data-code="de" onclick="setLang('de','Deutsch','&#127465;&#127466;',event)">
+          <span class="tb-flag">&#127465;&#127466;</span> Deutsch
+        </button>
+        <button class="tb-menu-item" data-code="es" onclick="setLang('es','Espa&#241;ol','&#127466;&#127480;',event)">
+          <span class="tb-flag">&#127466;&#127480;</span> Espa&#241;ol
+        </button>
+        <button class="tb-menu-item" data-code="ru" onclick="setLang('ru','&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;','&#127479;&#127482;',event)">
+          <span class="tb-flag">&#127479;&#127482;</span> &#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <div class="ta-text-top">
+      <span class="ta-rank">Ranked #1 on TripAdvisor</span>
+      <span class="ta-stars-top">★★★★★ <span style="color:rgba(242,228,203,0.5);font-size:0.6rem">500+ Reviews</span></span>
+    </div>
+  </a>
+
+  <!-- Right side: Currency + Language -->
+  <div class="topbar-right">
+
+    <!-- Currency Selector -->
+    <div class="tb-dropdown" id="curr-dd">
+      <button class="tb-trigger" onclick="toggleDD('curr-dd')">
+        <span id="curr-symbol">$</span>
+        <span id="curr-label">USD</span>
+        <span class="tb-caret">▼</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" onclick="setCurrency('USD','$','USD')">
+          <span class="tb-symbol">$</span> US Dollar
+        </button>
+        <button class="tb-menu-item" onclick="setCurrency('EUR','€','EUR')">
+          <span class="tb-symbol">€</span> Euro
+        </button>
+        <button class="tb-menu-item" onclick="setCurrency('GBP','£','GBP')">
+          <span class="tb-symbol">£</span> British Pound
+        </button>
+      </div>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Language Selector -->
+    <div class="tb-dropdown" id="lang-dd">
+      <button class="tb-trigger" onclick="toggleDD('lang-dd')">
+        <span class="tb-flag" id="lang-flag">🇬🇧</span>
+        <span id="lang-label">English</span>
+        <span class="tb-caret">▼</span>
+      </button>
+      <div class="tb-menu">
+        <button class="tb-menu-item active" onclick="setLang('en','English','🇬🇧')">
+          <span class="tb-flag">🇬🇧</span> English
+        </button>
+        <button class="tb-menu-item" onclick="setLang('de','Deutsch','🇩🇪')">
+          <span class="tb-flag">🇩🇪</span> Deutsch
+        </button>
+        <button class="tb-menu-item" onclick="setLang('es','Español','🇪🇸')">
+          <span class="tb-flag">🇪🇸</span> Español
+        </button>
+        <button class="tb-menu-item" onclick="setLang('ru','Русский','🇷🇺')">
+          <span class="tb-flag">🇷🇺</span> Русский
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<nav id="nav" class="solid">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.jpg" alt="Godhope Adventure" class="nav-logo-img">
+    <span class="nav-logo-text">Godhope <em>Adventure</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="safari.html">Safari</a></li>
+    <li><a href="climbing.html">Climbing</a></li>
+    <li><a href="national-parks.html" class="active">National Parks</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+  <div class="hamburger" id="ham">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+  <img src="logo.jpg" alt="Godhope Adventure" style="width:72px;height:72px;object-fit:contain;border-radius:50%;background:var(--bark);margin-bottom:0.5rem;">
+  <a href="index.html">Home</a>
+  <a href="safari.html" id="mob-link-safari">Safari</a>
+  <a href="climbing.html">Climbing</a>
+  <a href="national-parks.html" id="mob-link-parks">National Parks</a>
+  <a href="about.html" id="mob-link-about">About Us</a>
+  <a href="contact.html" id="mob-link-cta">Plan My Trip</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero" id="parks">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=1600&q=85');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-arch"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 L0,40 Q360,0 720,30 Q1080,60 1440,20 L1440,80 Z" fill="#FDFAF4"/></svg></div>
+  <div class="page-hero-content rise d1">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>National Parks</div>
+    <h1>Tanzania's <em>National Parks</em></h1>
+    <p>Seven extraordinary ecosystems — from the world's greatest wildlife migration to the last wild rhinos of East Africa.</p>
+  </div>
+</div>
+
+<!-- PARKS LIST -->
+<section class="parks-list-section">
+  <div class="container">
+    <div class="section-eyebrow">The Parks</div>
+    <h2 class="section-h2">Seven worlds, <em>one country</em></h2>
+    <p class="section-lead" style="margin-bottom:3rem;">Tanzania's national parks cover an area larger than France. Each has a completely different character, wildlife and atmosphere — many travellers return again and again to explore them all.</p>
+
+    <!-- Serengeti -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80" alt="Serengeti" loading="lazy">
+        <div class="park-badge">UNESCO World Heritage Site</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">01</div>
+        <div class="park-name">Serengeti<br><em>National Park</em></div>
+        <p class="park-desc">The Serengeti is the greatest wildlife spectacle on earth. Vast golden plains stretching to every horizon, home to the world's largest mammal migration — 1.5 million wildebeest, hundreds of thousands of zebra and gazelle moving in an ancient cycle of survival.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Great Migration</span>
+          <span class="highlight-pill">Big Five</span>
+          <span class="highlight-pill">Balloon Safaris</span>
+          <span class="highlight-pill">Cheetah</span>
+          <span class="highlight-pill">Wild Dog</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">14,763 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Year-round</div><div class="pmeta-l">Best Visited</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">1.5M+</div><div class="pmeta-l">Wildebeest</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Ngorongoro -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=900&q=80" alt="Ngorongoro" loading="lazy">
+        <div class="park-badge">UNESCO World Heritage Site</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">02</div>
+        <div class="park-name">Ngorongoro<br><em>Crater</em></div>
+        <p class="park-desc">The world's largest intact volcanic caldera, Ngorongoro is often called the "Garden of Eden." The crater floor teems with an astonishing density of wildlife — lion, elephant, black rhino, flamingo and more — all within a natural bowl that feels like a lost world.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Black Rhino</span>
+          <span class="highlight-pill">Dense Wildlife</span>
+          <span class="highlight-pill">Flamingos</span>
+          <span class="highlight-pill">Maasai Villages</span>
+          <span class="highlight-pill">Olduvai Gorge</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">304 km²</div><div class="pmeta-l">Crater Floor</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">2,200m</div><div class="pmeta-l">Crater Rim</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">25,000+</div><div class="pmeta-l">Animals inside</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Tarangire -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1568111561564-08726a1563e1?w=900&q=80" alt="Tarangire" loading="lazy">
+        <div class="park-badge">Elephant Country</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">03</div>
+        <div class="park-name">Tarangire<br><em>National Park</em></div>
+        <p class="park-desc">Famous for its extraordinary elephant populations — some of the largest in Africa — Tarangire is characterised by ancient baobab trees and the meandering Tarangire River. In the dry season, animals crowd the river in incredible numbers, making it one of Tanzania's most productive game-viewing destinations.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Elephant Herds</span>
+          <span class="highlight-pill">Baobab Trees</span>
+          <span class="highlight-pill">Walking Safaris</span>
+          <span class="highlight-pill">Rare Oryx</span>
+          <span class="highlight-pill">Night Drives</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">2,850 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Jun–Oct</div><div class="pmeta-l">Best Season</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">3,000+</div><div class="pmeta-l">Elephants</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Lake Manyara -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1504440374568-c6d6bce52fa2?w=900&q=80" alt="Lake Manyara" loading="lazy">
+        <div class="park-badge">Tree-Climbing Lions</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">04</div>
+        <div class="park-name">Lake Manyara<br><em>National Park</em></div>
+        <p class="park-desc">A diverse and compact park running along the shores of an alkaline soda lake. Famous for its tree-climbing lions — a unique behaviour rarely seen elsewhere — and for the million-strong flamingo flocks that colour the lake pink. An ideal first or last stop on any northern circuit safari.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Tree-climbing Lions</span>
+          <span class="highlight-pill">Flamingos</span>
+          <span class="highlight-pill">Hippos</span>
+          <span class="highlight-pill">Hot Springs</span>
+          <span class="highlight-pill">Birdwatching</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">330 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">Year-round</div><div class="pmeta-l">Best Visited</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">400+</div><div class="pmeta-l">Bird Species</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Arusha NP -->
+    <div class="park-entry">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1551292831-023188e78222?w=900&q=80" alt="Arusha NP" loading="lazy">
+        <div class="park-badge">City Gateway</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">05</div>
+        <div class="park-name">Arusha<br><em>National Park</em></div>
+        <p class="park-desc">Often overlooked in favour of its famous neighbours, Arusha National Park punches well above its weight. Nestled around Mount Meru, it offers walking safaris, canoeing on Fig Tree Crater Lake, and excellent giraffe and buffalo sightings — all within an hour of Arusha city.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Walking Safari</span>
+          <span class="highlight-pill">Canoeing</span>
+          <span class="highlight-pill">Colobus Monkeys</span>
+          <span class="highlight-pill">Giraffe</span>
+          <span class="highlight-pill">Mount Meru</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">552 km²</div><div class="pmeta-l">Park Area</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">45 min</div><div class="pmeta-l">From Arusha</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">4,562m</div><div class="pmeta-l">Mount Meru</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+    <!-- Lake Natron -->
+    <div class="park-entry flip">
+      <div class="park-entry-img">
+        <img src="https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=900&q=80" alt="Lake Natron" loading="lazy">
+        <div class="park-badge">Flamingo Breeding Ground</div>
+      </div>
+      <div class="park-entry-body">
+        <div class="park-num">06</div>
+        <div class="park-name">Lake Natron<br><em>&amp; Ol Doinyo Lengai</em></div>
+        <p class="park-desc">One of Africa's most otherworldly landscapes. The blood-red alkaline lake is the world's primary flamingo breeding ground, and the adjacent Ol Doinyo Lengai volcano — the "Mountain of God" — is one of the most active in Africa. A truly off-the-beaten-path destination.</p>
+        <div class="park-highlights">
+          <span class="highlight-pill">Flamingo Breeding</span>
+          <span class="highlight-pill">Active Volcano</span>
+          <span class="highlight-pill">Maasai Culture</span>
+          <span class="highlight-pill">Dramatic Scenery</span>
+          <span class="highlight-pill">Photography</span>
+        </div>
+        <div class="park-meta">
+          <div class="pmeta-item"><div class="pmeta-n">57 km</div><div class="pmeta-l">Lake Length</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">2,962m</div><div class="pmeta-l">Lengai Volcano</div></div>
+          <div class="pmeta-item"><div class="pmeta-n">1.5M+</div><div class="pmeta-l">Flamingos</div></div>
+        </div>
+        <a href="tour-detail.html" class="btn-primary" style="margin-top:2rem;align-self:flex-start;">Safari Packages →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" style="padding: 8rem 5rem;">
+  <div class="cta-bg" style="background-image: url('https://images.unsplash.com/photo-1486591038519-6e719f5f6a05?w=1600&q=80');"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Plan Your Parks</div>
+    <h2 class="cta-h2">Which park will <em>call you first?</em></h2>
+    <p class="cta-p">Let our team help you design the perfect park circuit — we know every corner of Tanzania and will match the right combination to your time and interests.</p>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-light" data-i18n="plan_safari">Plan My Safari →</a>
+      <a href="safari.html" class="btn-outline-light" data-i18n="view_packages">View Safari Packages</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="contact-strip">
+  <p class="contact-strip-copy"><strong>Ready to talk?</strong> Our team is available 7 days a week.</p>
+  <div class="contact-chips">
+    <a href="/cdn-cgi/l/email-protection#aac2cfc6c6c5ead9cbdccbc4c4cbcbc4ced9dfc7c7c3de84c9c584ded0" class="chip">&#9993; <span class="__cf_email__" data-cfemail="19717c757576596a786f7877777878777d6a6c7474706d377a76376d63">[email&#160;protected]</span></a>
+    <a href="tel:+255000000000" class="chip">&#9990; +255 000 000 000</a>
+    <a href="https://wa.me/255000000000" class="chip">WhatsApp</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-logo footer-logo-img-wrap">
+      <img src="logo.jpg" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
+      <span>Godhope <em style="font-style:italic;">Adventure</em></span>
+    </a>
+      <p class="footer-about"><span data-i18n="footer_about">Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Arusha. Adventure Without Limits.</span></p>
+      <div class="footer-socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">fb</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Safari</h5>
+      <ul>
+        <li><a href="safari.html">Safari Overview</a></li>
+        <li><a href="national-parks.html">National Parks</a></li>
+        <li><a href="safari.html">Private Safari</a></li>
+        <li><a href="safari.html">Group Safari</a></li>
+        <li><a href="safari.html">Great Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Climbing</h5>
+      <ul>
+        <li><a href="climbing.html">Climbing Overview</a></li>
+        <li><a href="climbing.html">Lemosho Route</a></li>
+        <li><a href="climbing.html">Machame Route</a></li>
+        <li><a href="climbing.html">Mount Meru</a></li>
+        <li><a href="climbing.html">Climbing FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Our Guides</a></li>
+        <li><a href="about.html">Conservation</a></li>
+        <li><a href="about.html">Reviews</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Godhope Adventure. All rights reserved. &middot; Arusha, Tanzania</span>
+    <div class="footer-certs">
+      <span class="cert">Licensed Tour Operator</span>
+      <span class="cert">Tanzania Tourism Board</span>
+    </div>
+  </div>
+</footer>
+<a href="https://wa.me/255000000000" class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>
+  <span class="wa-float-label">Chat with us</span>
+</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<script>
+(function(){
+  var nav = document.getElementById('nav');
+  if(!nav) return;
+  if(!nav.classList.contains('solid')){
+    window.addEventListener('scroll',function(){
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+  }
+  var ham = document.getElementById('ham');
+  var mob = document.getElementById('mob-nav');
+  var cls = document.getElementById('mob-close');
+  if(ham && mob) ham.addEventListener('click',function(){ mob.classList.add('open'); });
+  if(cls && mob) cls.addEventListener('click',function(){ mob.classList.remove('open'); });
+  if(mob) mob.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){ mob.classList.remove('open'); });
+  });
+})();
+</script>
+</body>
+</html>
