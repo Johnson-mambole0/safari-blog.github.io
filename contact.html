@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact &amp; Plan My Trip | Godhope Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 6rem; align-items: start;
+}
+.contact-aside {}
+.aside-title { font-family: var(--serif); font-size: 1.5rem; color: var(--bark); margin-bottom: 1rem; }
+.aside-p { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 2rem; }
+.contact-method { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid rgba(196,98,45,0.12); }
+.contact-method:first-of-type { border-top: 1px solid rgba(196,98,45,0.12); }
+.cm-icon { width: 40px; height: 40px; background: rgba(196,98,45,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.cm-icon svg { fill: var(--terra); width: 18px; height: 18px; }
+.cm-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.25rem; }
+.cm-value { font-size: 0.95rem; color: var(--bark); font-weight: 400; }
+.cm-value a { color: var(--terra); text-decoration: none; }
+.cm-value a:hover { color: var(--clay); }
+.cm-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+/* Form card */
+.form-card {
+  background: var(--warm-white); border: 1px solid rgba(196,98,45,0.15);
+  padding: 3rem; border-radius: 4px;
+  box-shadow: 0 4px 32px rgba(124,61,30,0.07);
+}
+.form-card-title { font-family: var(--serif); font-size: 1.6rem; color: var(--bark); margin-bottom: 0.5rem; }
+.form-card-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 2rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-check-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.form-check { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
+.form-check input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--terra); cursor: pointer; }
+.form-check span { font-size: 0.9rem; color: var(--text-mid); }
+.submit-btn {
+  width: 100%; padding: 1rem;
+  background: var(--terra); color: var(--warm-white);
+  border: none; border-radius: 2px; cursor: pointer;
+  font-family: var(--sans); font-size: 0.85rem;
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 400;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+.submit-btn:hover { background: var(--clay); }
+.form-privacy { font-size: 0.75rem; color: var(--text-faint); margin-top: 1rem; text-align: center; }
+
+/* Success state */
+.form-success {
+  display: none; text-align: center; padding: 2rem 0;
+}
+.success-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.success-title { font-family: var(--serif); font-size: 1.5rem; color: var(--bark); margin-bottom: 0.75rem; }
+.success-p { font-size: 0.95rem; color: var(--text-muted); }
+
+/* Office info */
+.office-section { background: var(--sand); padding: 5rem; }
+.office-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+.office-card { background: var(--warm-white); border: 1px solid rgba(196,98,45,0.12); padding: 2rem; border-radius: 3px; }
+.office-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+.office-title { font-family: var(--serif); font-size: 1.1rem; color: var(--bark); margin-bottom: 0.75rem; }
+.office-detail { font-size: 0.87rem; color: var(--text-muted); line-height: 1.8; }
+.office-detail a { color: var(--terra); text-decoration: none; }
+.office-detail a:hover { color: var(--clay); }
+
+/* WhatsApp strip */
+.wa-strip {
+  background: #25D366; padding: 1.5rem 5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.wa-text { color: #fff; font-size: 1rem; }
+.wa-text strong { font-weight: 500; }
+.wa-btn {
+  background: #fff; color: #25D366;
+  padding: 0.65rem 1.5rem; border-radius: 2px;
+  text-decoration: none; font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  white-space: nowrap; transition: opacity 0.2s;
+}
+.wa-btn:hover { opacity: 0.9; }
+
+@media (max-width: 960px) {
+  .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .form-card { padding: 2rem 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .office-grid { grid-template-columns: 1fr; }
+  .office-section { padding: 4rem 1.5rem; }
+  .wa-strip { flex-direction: column; text-align: center; padding: 1.5rem; }
+}
+</style>
+
+
+
+
+
+
+
+<style id="gha-topbar-css">
+.gha-topbar{position:fixed;top:0;left:0;right:0;z-index:600;background:var(--bark);font-family:var(--sans);font-size:.75rem}
+.gha-topbar-inner{max-width:1400px;margin:0 auto;padding:.4rem 3.5rem;display:flex;align-items:center;justify-content:flex-end;gap:.75rem}
+.gha-gt .goog-te-gadget{font-size:.72rem!important;color:rgba(237,184,122,.75)!important;font-family:var(--sans)!important}
+.gha-gt select,.gha-gt .goog-te-combo{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.22rem .5rem;border-radius:2px;cursor:pointer;outline:none;max-width:140px}
+.gha-gt select:focus{border-color:var(--amber-pale)}
+.goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
+.goog-logo-link,.goog-te-gadget>span{display:none!important}
+body{top:0!important}
+.gha-topbar-right{display:flex;align-items:center;gap:.75rem}
+.gha-cur-wrap{position:relative}
+.gha-cur-btn{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.24rem .65rem;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s;white-space:nowrap;line-height:1.4}
+.gha-cur-btn:hover{border-color:var(--amber-pale);color:var(--amber-pale)}
+.gha-cur-drop{position:fixed;top:30px;right:3.5rem;background:#2a1a0e;border:1px solid rgba(237,184,122,.15);min-width:215px;z-index:900;box-shadow:0 8px 24px rgba(0,0,0,.45);display:none;border-radius:2px;overflow:hidden}
+.gha-cur-drop.open{display:block}
+.gha-cur-drop button{display:block;width:100%;background:none;border:none;border-bottom:1px solid rgba(237,184,122,.06);padding:.6rem 1rem;color:rgba(237,184,122,.65);font-family:var(--sans);font-size:.78rem;text-align:left;cursor:pointer;transition:background .15s,color .15s}
+.gha-cur-drop button:last-child{border-bottom:none}
+.gha-cur-drop button:hover{background:rgba(237,184,122,.08);color:var(--amber-pale)}
+nav{top:30px!important}
+@media(max-width:768px){
+  .gha-topbar-inner{padding:.38rem 1rem;gap:.5rem}
+  .gha-cur-drop{right:1rem;top:28px}
+  nav{top:28px!important}
+}
+</style>
+<!-- Google Translate -->
+<script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,fr,de,es,it,zh-CN,ar,sw,ko,ja,pt,ru',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');}</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+<script>
+var _GHA_RATES={USD:1,EUR:.92,GBP:.79,TZS:2650,KES:130,AUD:1.53,CAD:1.36,ZAR:18.5};
+var _GHA_SYM={USD:'$',EUR:'\u20ac',GBP:'\u00a3',TZS:'TSh',KES:'KSh',AUD:'A$',CAD:'C$',ZAR:'R'};
+var _GHA_CUR=localStorage.getItem('gha_currency')||'USD';
+function setCurrency(code,sym){
+  _GHA_CUR=code;
+  localStorage.setItem('gha_currency',code);
+  var label=document.getElementById('gha-cur-label');
+  if(label)label.textContent=sym+' '+code;
+  var drop=document.getElementById('gha-cur-drop');
+  if(drop)drop.classList.remove('open');
+  // Update all tagged price spans
+  document.querySelectorAll('[data-price-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-price-usd'));
+    if(!isNaN(usd)){
+      var v=Math.round(usd*(_GHA_RATES[code]||1));
+      el.textContent=sym+v.toLocaleString();
+    }
+  });
+  // Update containers with data-usd
+  document.querySelectorAll('[data-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-usd'));
+    if(isNaN(usd))return;
+    var v=Math.round(usd*(_GHA_RATES[code]||1));
+    var sup=el.querySelector('sup');
+    if(sup)sup.textContent='from '+sym;
+    var nodes=el.childNodes;
+    for(var i=0;i<nodes.length;i++){
+      if(nodes[i].nodeType===3&&/[\d,]/.test(nodes[i].textContent)){
+        nodes[i].textContent=v.toLocaleString();
+        break;
+      }
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  if(_GHA_CUR!=='USD'){
+    var sym=_GHA_SYM[_GHA_CUR]||'$';
+    var label=document.getElementById('gha-cur-label');
+    if(label)label.textContent=sym+' '+_GHA_CUR;
+    setCurrency(_GHA_CUR,sym);
+  }
+});
+</script>
+</head>
+<body>
+<div class="mobile-nav" id="mob-nav" role="dialog" aria-label="Navigation menu">
+  <button class="mobile-nav-close" id="mob-close" aria-label="Close menu">&#10005;</button>
+  <img src="logo.jpg" alt="Godhope Adventure" class="mob-nav-logo">
+  <a href="index.html">Home</a>
+  <a href="safari.html">Safari</a>
+  <a href="climbing.html">Climbing</a>
+  <a href="national-parks.html">National Parks</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html" class="mob-nav-cta active">Plan My Trip</a>
+</div>
+<div class="gha-topbar" id="gha-topbar">
+  <div class="gha-topbar-inner">
+    <div class="gha-topbar-right">
+      <div id="google_translate_element" class="gha-gt"></div>
+      <div class="gha-cur-wrap" id="gha-cur-wrap">
+        <button class="gha-cur-btn" id="gha-cur-toggle" aria-label="Select currency">
+          <span id="gha-cur-label">$ USD</span>
+          <svg width="9" height="5" viewBox="0 0 9 5" fill="none"><path d="M0 0l4.5 5L9 0H0z" fill="currentColor"/></svg>
+        </button>
+        <div class="gha-cur-drop" id="gha-cur-drop">
+          <button onclick="setCurrency('USD','$')">$ USD &mdash; US Dollar</button>
+          <button onclick="setCurrency('EUR','&#8364;')">&#8364; EUR &mdash; Euro</button>
+          <button onclick="setCurrency('GBP','&#163;')">&#163; GBP &mdash; British Pound</button>
+          <button onclick="setCurrency('TZS','TSh')">TSh TZS &mdash; Tanzanian Shilling</button>
+          <button onclick="setCurrency('KES','KSh')">KSh KES &mdash; Kenyan Shilling</button>
+          <button onclick="setCurrency('AUD','A$')">A$ AUD &mdash; Australian Dollar</button>
+          <button onclick="setCurrency('CAD','C$')">C$ CAD &mdash; Canadian Dollar</button>
+          <button onclick="setCurrency('ZAR','R')">R ZAR &mdash; South African Rand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav id="nav" class="solid">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.jpg" alt="Godhope Adventure" class="nav-logo-img">
+    <span class="nav-logo-text">Godhope <em>Adventure</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="safari.html">Safari</a></li>
+    <li><a href="climbing.html">Climbing</a></li>
+    <li><a href="national-parks.html">National Parks</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+  <button class="hamburger" id="ham" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero" style="min-height:340px;">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1486591038519-6e719f5f6a05?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-arch"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 L0,40 Q360,0 720,30 Q1080,60 1440,20 L1440,80 Z" fill="#FDFAF4"/></svg></div>
+  <div class="page-hero-content rise d1">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>Contact</div>
+    <h1>Plan your <em>Tanzania adventure</em></h1>
+    <p>Tell us your dream. We'll design a personalised itinerary and respond within 24 hours — usually much sooner.</p>
+  </div>
+</div>
+
+<!-- MAIN CONTACT -->
+<section style="background: var(--sand-light);">
+  <div class="container">
+    <div class="contact-layout">
+
+      <!-- ASIDE -->
+      <div class="contact-aside">
+        <h2 class="aside-title">Let's start <em style="font-style:italic;color:var(--clay);">planning</em></h2>
+        <p class="aside-p">Whether you have a fully formed idea or just a vague desire to see Africa's wildlife and mountains, our team is here to help. Fill in the form and we'll put together a personalised proposal at no obligation.</p>
+
+        <div class="contact-method">
+          <div class="cm-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <div>
+            <div class="cm-label">Email Us</div>
+            <div class="cm-value"><a href="/cdn-cgi/l/email-protection#d5bdb0b9b9ba95a6b4a3b4bbbbb4b4bbb1a6a0b8b8bca1fbb6bafba1af"><span class="__cf_email__" data-cfemail="39515c555556794a584f5857575858575d4a4c5454504d175a56174d43">[email&#160;protected]</span></a></div>
+            <div class="cm-note">We reply within 24 hours, 7 days a week</div>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="cm-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+          <div>
+            <div class="cm-label">Call Us</div>
+            <div class="cm-value"><a href="tel:+255000000000">+255 000 000 000</a></div>
+            <div class="cm-note">Mon–Sat, 8am–6pm East Africa Time</div>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="cm-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.536 5.845L.057 24l6.304-1.506A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></div>
+          <div>
+            <div class="cm-label">WhatsApp</div>
+            <div class="cm-value"><a href="https://wa.me/255000000000">Chat on WhatsApp →</a></div>
+            <div class="cm-note">Fastest way to reach us — usually instant</div>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="cm-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+          <div>
+            <div class="cm-label">Our Office</div>
+            <div class="cm-value">Arusha, Kilimanjaro Region, Tanzania</div>
+            <div class="cm-note">Visits by appointment</div>
+          </div>
+        </div>
+
+        <div style="margin-top:2.5rem;">
+          <div class="section-eyebrow" style="margin-bottom:0.75rem;">Response Time</div>
+          <div class="info-box">
+            <p>We aim to reply to all enquiries within <strong>24 hours</strong>. For urgent requests, WhatsApp is the fastest route to our team. We are available 7 days a week during East Africa business hours.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card" id="form-card">
+        <div id="form-content">
+          <div class="form-card-title">Plan My Trip</div>
+          <p class="form-card-sub">Fill in as much or as little as you like. We'll be in touch to build the perfect itinerary for you.</p>
+
+          <div class="form-row" style="margin-bottom:1.5rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">First Name *</label>
+              <input class="form-input" type="text" placeholder="Sarah" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Last Name *</label>
+              <input class="form-input" type="text" placeholder="Chen" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input class="form-input" type="email" placeholder="sarah@email.com" required>
+          </div>
+
+          <div class="form-row" style="margin-bottom:1.5rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Country</label>
+              <input class="form-input" type="text" placeholder="United Kingdom">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Phone / WhatsApp</label>
+              <input class="form-input" type="tel" placeholder="+44 000 000 0000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">I'm interested in *</label>
+            <div class="form-check-group">
+              <label class="form-check"><input type="checkbox" checked><span>Wildlife Safari</span></label>
+              <label class="form-check"><input type="checkbox"><span>Kilimanjaro Climb</span></label>
+              <label class="form-check"><input type="checkbox"><span>Safari + Climb Combo</span></label>
+              <label class="form-check"><input type="checkbox"><span>Mount Meru</span></label>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:1.5rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Approx. Travel Dates</label>
+              <input class="form-input" type="text" placeholder="e.g. July 2025">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Group Size</label>
+              <select class="form-select">
+                <option value="">Select...</option>
+                <option>Just me (1)</option>
+                <option>2 people</option>
+                <option>3–5 people</option>
+                <option>6–10 people</option>
+                <option>10+ people</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Budget Per Person (USD)</label>
+            <select class="form-select">
+              <option value="">Prefer not to say</option>
+              <option>Under $1,500</option>
+              <option>$1,500 – $3,000</option>
+              <option>$3,000 – $5,000</option>
+              <option>$5,000 – $10,000</option>
+              <option>$10,000+</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tell us about your dream trip</label>
+            <textarea class="form-textarea" placeholder="Any parks you've always wanted to visit? Specific wildlife you'd love to see? Previous travel experience? The more you share, the better we can tailor your itinerary..."></textarea>
+          </div>
+
+          <button class="submit-btn" onclick="submitForm()" data-i18n="send_enquiry">Send My Enquiry →</button>
+          <p class="form-privacy">By submitting this form you agree to our privacy policy. We never share your details with third parties.</p>
+        </div>
+
+        <div class="form-success" id="form-success">
+          <span class="success-icon">✓</span>
+          <div class="success-title">Enquiry received!</div>
+          <p class="success-p">Thank you for reaching out. One of our Tanzania specialists will be in touch within 24 hours — often much sooner. In the meantime, feel free to <a href="https://wa.me/255000000000" style="color:var(--terra);">chat with us on WhatsApp</a>.</p>
+          <a href="index.html" class="btn-primary" style="margin-top:2rem;">← Back to Home</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHATSAPP STRIP -->
+<div class="wa-strip">
+  <p class="wa-text"><strong>Prefer to chat?</strong> Our team typically replies on WhatsApp within minutes during business hours.</p>
+  <a href="https://wa.me/255000000000" class="wa-btn">Open WhatsApp →</a>
+</div>
+
+<!-- OFFICE INFO -->
+<section class="office-section">
+  <div class="container">
+    <div class="section-eyebrow">Find Us</div>
+    <h2 class="section-h2">Based in <em>the heart of Tanzania</em></h2>
+    <p class="section-lead">Our office and logistics base are in Arusha — the safari capital of Tanzania, gateway to the Serengeti and the foot of Kilimanjaro.</p>
+    <div class="office-grid">
+      <div class="office-card">
+        <span class="office-icon">📍</span>
+        <div class="office-title">Our Location</div>
+        <div class="office-detail">
+          Godhope Adventure Ltd<br>
+          Arusha, Kilimanjaro Region<br>
+          Tanzania, East Africa<br><br>
+          <a href="https://maps.google.com" target="_blank">View on Google Maps →</a>
+        </div>
+      </div>
+      <div class="office-card">
+        <span class="office-icon">🕐</span>
+        <div class="office-title">Office Hours</div>
+        <div class="office-detail">
+          Monday – Friday: 8:00am – 6:00pm<br>
+          Saturday: 9:00am – 4:00pm<br>
+          Sunday: WhatsApp only<br><br>
+          East Africa Time (UTC+3)
+        </div>
+      </div>
+      <div class="office-card">
+        <span class="office-icon">✈️</span>
+        <div class="office-title">Getting to Arusha</div>
+        <div class="office-detail">
+          Fly into Kilimanjaro International Airport (JRO) or Arusha Airport (ARK). We offer airport pickup and drop-off for all guests. <br><br>
+          <a href="contact.html">Ask us about transfers →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background: var(--warm-white);">
+  <div class="container">
+    <div class="grid-2" style="gap:5rem;align-items:start;">
+      <div>
+        <div class="section-eyebrow">Common Questions</div>
+        <h2 class="section-h2">Before you <em>get in touch</em></h2>
+        <p class="section-lead">Quick answers to the queAcc(this)"><span class="accordion-btn-text">How far in advance should I book?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body" style="max-height:300px;"><div class="accordion-body-inner">For peak season (June–October) we recommend booking 4–6 months in advance, especially for Kilimanjaro climbs which have limited capacity. Off-peak travel can often be arranged with 4–6 weeks notice. Reach out as early as you can — it's never too early to start planning.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">What is your deposit and payment policy?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">We require a 30% deposit to confirm your booking. The balance is due 60 days before departure. We accept bank transfers, credit cards and various online payment methods. Full details are provided with your booking confirmation.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">Do you offer custom / private itineraries?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">Yes — the majority of our trips are fully customised. Tell us your dates, interests and budget, and we'll design something specifically for you. We don't believe in off-the-shelf travel and neither do our guests.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAcc(this)"><span class="accordion-btn-text">Is travel insurance required?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-body"><div class="accordion-body-inner">Yes — comprehensive travel insurance is required for all our trips, particularly for mountain climbs. Your policy must include medical evacuation cover. We can recommend suitable providers if needed. Please bring a copy of your policy details on the day of travel.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+async function submitForm() {
+  const inputs = document.querySelectorAll('#form-content input[required]');
+  let valid = true;
+  inputs.forEach(i => { if (!i.value.trim()) { valid = false; i.style.borderColor = 'var(--terra)'; } else { i.style.borderColor = ''; } });
+  if (!valid) return;
+
+  // Gather interests
+  const interests = Array.from(document.querySelectorAll('#form-content input[type="checkbox"]:checked'))
+    .map(cb => cb.closest('label').querySelector('span').textContent.trim());
+
+  const payload = {
+    first_name:   document.querySelector('input[placeholder="Sarah"]').value.trim(),
+    last_name:    document.querySelector('input[placeholder="Chen"]').value.trim(),
+    email:        document.querySelector('input[type="email"]').value.trim(),
+    phone:        document.querySelector('input[type="tel"]').value.trim(),
+    country:      document.querySelector('input[placeholder="United Kingdom"]').value.trim(),
+    travel_date:  document.querySelector('input[placeholder="e.g. July 2025"]').value.trim(),
+    group_size:   document.querySelector('select').value,
+    budget:       document.querySelectorAll('select')[1]?.value || '',
+    message:      document.querySelector('textarea').value.trim(),
+    interests
+  };
+
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/backend/api/enquiries.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      btn.textContent = 'Send My Enquiry →';
+      btn.disabled = false;
+      alert(data.error || 'Something went wrong. Please email us directly.');
+      return;
+    }
+
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  } catch (err) {
+    btn.textContent = 'Send My Enquiry →';
+    btn.disabled = false;
+    alert('Could not connect to server. Please email us directly at hello@godhopeadventure.co.tz');
+  }
+}
+function toggleAcc(btn) {
+  const item = btn.closest('.accordion-item');
+  const body = item.querySelector('.accordion-body');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.accordion-item').forEach(i => { i.classList.remove('open'); i.querySelector('.accordion-body').style.maxHeight = '0'; });
+  if (!isOpen) { item.classList.add('open'); body.style.maxHeight = body.querySelector('.accordion-body-inner').scrollHeight + 'px'; }
+}
+document.querySelectorAll('.accordion-item.open').forEach(item => {
+  item.querySelector('.accordion-body').style.maxHeight = item.querySelector('.accordion-body-inner').scrollHeight + 'px';
+});
+</script>
+
+
+<div class="contact-strip">
+  <p class="contact-strip-copy"><strong>Ready to talk?</strong> Our team is available 7 days a week.</p>
+  <div class="contact-chips">
+    <a href="/cdn-cgi/l/email-protection#9ff7faf3f3f0dfecfee9fef1f1fefef1fbeceaf2f2f6ebb1fcf0b1ebe5" class="chip">&#9993; <span class="__cf_email__" data-cfemail="48202d242427083b293e2926262929262c3b3d2525213c662b27663c32">[email&#160;protected]</span></a>
+    <a href="tel:+255000000000" class="chip">&#9990; +255 000 000 000</a>
+    <a href="https://wa.me/255000000000" class="chip">WhatsApp</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-logo footer-logo-img-wrap">
+      <img src="logo.jpg" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
+      <span>Godhope <em style="font-style:italic;">Adventure</em></span>
+    </a>
+      <p class="footer-about"><span data-i18n="footer_about">Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Arusha. Adventure Without Limits.</span></p>
+      <div class="footer-socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">fb</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Safari</h5>
+      <ul>
+        <li><a href="safari.html">Safari Overview</a></li>
+        <li><a href="national-parks.html">National Parks</a></li>
+        <li><a href="safari.html">Private Safari</a></li>
+        <li><a href="safari.html">Group Safari</a></li>
+        <li><a href="safari.html">Great Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Climbing</h5>
+      <ul>
+        <li><a href="climbing.html">Climbing Overview</a></li>
+        <li><a href="climbing.html">Lemosho Route</a></li>
+        <li><a href="climbing.html">Machame Route</a></li>
+        <li><a href="climbing.html">Mount Meru</a></li>
+        <li><a href="climbing.html">Climbing FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Our Guides</a></li>
+        <li><a href="about.html">Conservation</a></li>
+        <li><a href="about.html">Reviews</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Godhope Adventure. All rights reserved. &middot; Arusha, Tanzania</span>
+    <div class="footer-certs">
+      <span class="cert">Licensed Tour Operator</span>
+      <span class="cert">Tanzania Tourism Board</span>
+    </div>
+  </div>
+</footer>
+<a href="https://wa.me/255000000000" class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>
+  <span class="wa-float-label">Chat with us</span>
+</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+
+<script>
+(function(){
+  var nav=document.getElementById('nav');
+  if(!nav)return;
+  // Scroll shadow for transparent nav (homepage)
+  if(!nav.classList.contains('solid')){
+    window.addEventListener('scroll',function(){
+      nav.classList.toggle('scrolled',window.scrollY>60);
+    },{passive:true});
+  }
+  // Hamburger
+  var ham=document.getElementById('ham');
+  var mob=document.getElementById('mob-nav');
+  var cls=document.getElementById('mob-close');
+  if(ham&&mob){
+    ham.addEventListener('click',function(){
+      mob.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  }
+  if(cls&&mob){
+    cls.addEventListener('click',function(){
+      mob.classList.remove('open');
+      document.body.style.overflow='';
+    });
+  }
+  if(mob){
+    mob.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        mob.classList.remove('open');
+        document.body.style.overflow='';
+      });
+    });
+    // Close on backdrop click
+    mob.addEventListener('click',function(e){
+      if(e.target===mob){ mob.classList.remove('open'); document.body.style.overflow=''; }
+    });
+  }
+  // Currency dropdown close on outside click
+  document.addEventListener('click',function(){
+    var d=document.getElementById('gha-cur-drop');
+    if(d)d.classList.remove('open');
+  });
+  var ct=document.getElementById('gha-cur-toggle');
+  var cd=document.getElementById('gha-cur-drop');
+  if(ct&&cd){
+    ct.addEventListener('click',function(e){
+      e.stopPropagation();
+      cd.classList.toggle('open');
+    });
+  }
+})();
+</script>
+</body>
+</html>
