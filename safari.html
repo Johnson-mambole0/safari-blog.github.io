@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wildlife Safari | Godhope Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── PAGE-SPECIFIC ── */
+.experience-band { background: var(--sand); padding: 5rem; }
+.exp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+.exp-card {
+  background: var(--warm-white); border: 1px solid rgba(196,98,45,0.12);
+  border-radius: 3px; overflow: hidden; text-decoration: none; display: block;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.exp-card:hover { box-shadow: 0 12px 40px rgba(124,61,30,0.13); transform: translateY(-4px); }
+.exp-card-img { aspect-ratio: 16/10; overflow: hidden; position: relative; }
+.exp-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; display: block; }
+.exp-card:hover .exp-card-img img { transform: scale(1.06); }
+.exp-tag { position: absolute; top: 1rem; left: 1rem; background: var(--terra); color: var(--warm-white); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 1px; }
+.exp-body { padding: 1.5rem; }
+.exp-days { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.35rem; }
+.exp-title { font-family: var(--serif); font-size: 1.2rem; color: var(--bark); margin-bottom: 0.4rem; }
+.exp-parks { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.1rem; }
+.exp-footer { display: flex; align-items: center; justify-content: space-between; }
+.exp-price { font-family: var(--serif); font-size: 1.3rem; color: var(--clay); }
+.exp-price sup { font-family: var(--sans); font-size: 0.68rem; color: var(--text-muted); }
+.exp-arrow { width: 34px; height: 34px; border: 1px solid rgba(196,98,45,0.3); display: flex; align-items: center; justify-content: center; color: var(--terra); border-radius: 2px; transition: background 0.2s, color 0.2s; }
+.exp-card:hover .exp-arrow { background: var(--terra); color: var(--warm-white); }
+
+/* Vehicles */
+.vehicle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.vehicle-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+.vf { display: flex; gap: 0.75rem; align-items: flex-start; }
+.vf-icon { width: 36px; height: 36px; background: rgba(196,98,45,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.vf-icon svg { fill: var(--terra); width: 16px; height: 16px; }
+.vf-text strong { display: block; font-size: 0.88rem; color: var(--bark); font-weight: 500; }
+.vf-text span { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Animals */
+.animals-section { background: var(--sand-light); }
+.animals-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.animal-card { text-align: center; padding: 1.5rem 1rem; background: var(--warm-white); border: 1px solid rgba(196,98,45,0.1); border-radius: 3px; transition: background 0.2s; }
+.animal-card:hover { background: rgba(242,228,203,0.4); }
+.animal-emoji { font-size: 2.2rem; margin-bottom: 0.75rem; display: block; }
+.animal-name { font-family: var(--serif); font-size: 1rem; color: var(--bark); margin-bottom: 0.25rem; }
+.animal-desc { font-size: 0.76rem; color: var(--text-muted); }
+
+/* Best time */
+.months-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-top: 2rem; }
+.month-col { text-align: center; }
+.month-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+.month-bar { height: 80px; border-radius: 2px; position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.month-bar.peak { background: rgba(196,98,45,0.7); }
+.month-bar.good { background: rgba(212,134,58,0.5); }
+.month-bar.ok { background: rgba(196,98,45,0.18); }
+.month-tip { position: absolute; top: -1.5rem; font-size: 0.6rem; color: var(--terra); white-space: nowrap; display: none; }
+.month-col:hover .month-tip { display: block; }
+.bar-legend { display: flex; gap: 1.5rem; margin-top: 1rem; }
+.leg { display: flex; align-items: center; gap: 0.5rem; font-size: 0.76rem; color: var(--text-muted); }
+.leg-dot { width: 12px; height: 12px; border-radius: 2px; }
+
+@media (max-width: 960px) {
+  .experience-band { padding: 4rem 1.5rem; }
+  .exp-grid { grid-template-columns: 1fr; }
+  .vehicle-grid { grid-template-columns: 1fr; }
+  .vehicle-features { grid-template-columns: 1fr; }
+  .animals-grid { grid-template-columns: repeat(2, 1fr); }
+  .months-grid { grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 480px) {
+  .animals-grid { grid-template-columns: 1fr 1fr; }
+  .months-grid { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+
+
+
+
+
+
+
+<style id="gha-topbar-css">
+.gha-topbar{position:fixed;top:0;left:0;right:0;z-index:600;background:var(--bark);font-family:var(--sans);font-size:.75rem}
+.gha-topbar-inner{max-width:1400px;margin:0 auto;padding:.4rem 3.5rem;display:flex;align-items:center;justify-content:flex-end;gap:.75rem}
+.gha-gt .goog-te-gadget{font-size:.72rem!important;color:rgba(237,184,122,.75)!important;font-family:var(--sans)!important}
+.gha-gt select,.gha-gt .goog-te-combo{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.22rem .5rem;border-radius:2px;cursor:pointer;outline:none;max-width:140px}
+.gha-gt select:focus{border-color:var(--amber-pale)}
+.goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
+.goog-logo-link,.goog-te-gadget>span{display:none!important}
+body{top:0!important}
+.gha-topbar-right{display:flex;align-items:center;gap:.75rem}
+.gha-cur-wrap{position:relative}
+.gha-cur-btn{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.24rem .65rem;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s;white-space:nowrap;line-height:1.4}
+.gha-cur-btn:hover{border-color:var(--amber-pale);color:var(--amber-pale)}
+.gha-cur-drop{position:fixed;top:30px;right:3.5rem;background:#2a1a0e;border:1px solid rgba(237,184,122,.15);min-width:215px;z-index:900;box-shadow:0 8px 24px rgba(0,0,0,.45);display:none;border-radius:2px;overflow:hidden}
+.gha-cur-drop.open{display:block}
+.gha-cur-drop button{display:block;width:100%;background:none;border:none;border-bottom:1px solid rgba(237,184,122,.06);padding:.6rem 1rem;color:rgba(237,184,122,.65);font-family:var(--sans);font-size:.78rem;text-align:left;cursor:pointer;transition:background .15s,color .15s}
+.gha-cur-drop button:last-child{border-bottom:none}
+.gha-cur-drop button:hover{background:rgba(237,184,122,.08);color:var(--amber-pale)}
+nav{top:30px!important}
+@media(max-width:768px){
+  .gha-topbar-inner{padding:.38rem 1rem;gap:.5rem}
+  .gha-cur-drop{right:1rem;top:28px}
+  nav{top:28px!important}
+}
+</style>
+<!-- Google Translate -->
+<script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,fr,de,es,it,zh-CN,ar,sw,ko,ja,pt,ru',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');}</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+<script>
+var _GHA_RATES={USD:1,EUR:.92,GBP:.79,TZS:2650,KES:130,AUD:1.53,CAD:1.36,ZAR:18.5};
+var _GHA_SYM={USD:'$',EUR:'\u20ac',GBP:'\u00a3',TZS:'TSh',KES:'KSh',AUD:'A$',CAD:'C$',ZAR:'R'};
+var _GHA_CUR=localStorage.getItem('gha_currency')||'USD';
+function setCurrency(code,sym){
+  _GHA_CUR=code;
+  localStorage.setItem('gha_currency',code);
+  var label=document.getElementById('gha-cur-label');
+  if(label)label.textContent=sym+' '+code;
+  var drop=document.getElementById('gha-cur-drop');
+  if(drop)drop.classList.remove('open');
+  // Update all tagged price spans
+  document.querySelectorAll('[data-price-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-price-usd'));
+    if(!isNaN(usd)){
+      var v=Math.round(usd*(_GHA_RATES[code]||1));
+      el.textContent=sym+v.toLocaleString();
+    }
+  });
+  // Update containers with data-usd
+  document.querySelectorAll('[data-usd]').forEach(function(el){
+    var usd=parseFloat(el.getAttribute('data-usd'));
+    if(isNaN(usd))return;
+    var v=Math.round(usd*(_GHA_RATES[code]||1));
+    var sup=el.querySelector('sup');
+    if(sup)sup.textContent='from '+sym;
+    var nodes=el.childNodes;
+    for(var i=0;i<nodes.length;i++){
+      if(nodes[i].nodeType===3&&/[\d,]/.test(nodes[i].textContent)){
+        nodes[i].textContent=v.toLocaleString();
+        break;
+      }
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  if(_GHA_CUR!=='USD'){
+    var sym=_GHA_SYM[_GHA_CUR]||'$';
+    var label=document.getElementById('gha-cur-label');
+    if(label)label.textContent=sym+' '+_GHA_CUR;
+    setCurrency(_GHA_CUR,sym);
+  }
+});
+</script>
+</head>
+<body>
+<div class="mobile-nav" id="mob-nav" role="dialog" aria-label="Navigation menu">
+  <button class="mobile-nav-close" id="mob-close" aria-label="Close menu">&#10005;</button>
+  <img src="logo.jpg" alt="Godhope Adventure" class="mob-nav-logo">
+  <a href="index.html">Home</a>
+  <a href="safari.html" class="active">Safari</a>
+  <a href="climbing.html">Climbing</a>
+  <a href="national-parks.html">National Parks</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Plan My Trip</a>
+</div>
+<div class="gha-topbar" id="gha-topbar">
+  <div class="gha-topbar-inner">
+    <div class="gha-topbar-right">
+      <div id="google_translate_element" class="gha-gt"></div>
+      <div class="gha-cur-wrap" id="gha-cur-wrap">
+        <button class="gha-cur-btn" id="gha-cur-toggle" aria-label="Select currency">
+          <span id="gha-cur-label">$ USD</span>
+          <svg width="9" height="5" viewBox="0 0 9 5" fill="none"><path d="M0 0l4.5 5L9 0H0z" fill="currentColor"/></svg>
+        </button>
+        <div class="gha-cur-drop" id="gha-cur-drop">
+          <button onclick="setCurrency('USD','$')">$ USD &mdash; US Dollar</button>
+          <button onclick="setCurrency('EUR','&#8364;')">&#8364; EUR &mdash; Euro</button>
+          <button onclick="setCurrency('GBP','&#163;')">&#163; GBP &mdash; British Pound</button>
+          <button onclick="setCurrency('TZS','TSh')">TSh TZS &mdash; Tanzanian Shilling</button>
+          <button onclick="setCurrency('KES','KSh')">KSh KES &mdash; Kenyan Shilling</button>
+          <button onclick="setCurrency('AUD','A$')">A$ AUD &mdash; Australian Dollar</button>
+          <button onclick="setCurrency('CAD','C$')">C$ CAD &mdash; Canadian Dollar</button>
+          <button onclick="setCurrency('ZAR','R')">R ZAR &mdash; South African Rand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav id="nav" class="solid">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.jpg" alt="Godhope Adventure" class="nav-logo-img">
+    <span class="nav-logo-text">Godhope <em>Adventure</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="safari.html" class="active">Safari</a></li>
+    <li><a href="climbing.html">Climbing</a></li>
+    <li><a href="national-parks.html">National Parks</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+  <button class="hamburger" id="ham" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero" id="safari">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1600&q=85');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-arch"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 L0,40 Q360,0 720,30 Q1080,60 1440,20 L1440,80 Z" fill="#FDFAF4"/></svg></div>
+  <div class="page-hero-content rise d1">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>Safari</div>
+    <h1>Wildlife Safari <em>in Tanzania</em></h1>
+    <p>Game drives through Africa's most iconic parks, led by expert local naturalists who know every creature, call and track.</p>
+  </div>
+</div>
+
+<!-- INTRO BAND -->
+<div class="intro-band">
+  <div class="intro-pill">
+    <div class="intro-pill-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+    <div class="intro-pill-text"><strong>7 National Parks</strong><span>Serengeti, Ngorongoro &amp; more</span></div>
+  </div>
+  <div class="intro-pill">
+    <div class="intro-pill-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
+    <div class="intro-pill-text"><strong>Year-Round Departures</strong><span>Private &amp; group options</span></div>
+  </div>
+  <div class="intro-pill">
+    <div class="intro-pill-icon"><svg viewBox="0 0 24 24"><path d="M21 6.5l-4-4-9.5 9.5-2 4.5 4.5-2L21 6.5zM5.91 16.09l-.81-2.29L7.5 12.5l1.5 1.5-3.09 2.09z"/></svg></div>
+    <div class="intro-pill-text"><strong>Expert Naturalist Guides</strong><span>Certified &amp; highly rated</span></div>
+  </div>
+  <div class="intro-pill">
+    <div class="intro-pill-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25S13.24 11.25 12 11.25 9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-.75c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg></div>
+    <div class="intro-pill-text"><strong>Private &amp; Group Departures</strong><span>Small groups, personal service</span></div>
+  </div>
+</div>
+
+<!-- PACKAGES -->
+<section class="experience-band" id="packages">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:0;">
+      <div>
+        <div class="section-eyebrow">Safari Packages</div>
+        <h2 class="section-h2" style="margin-bottom:0;">Choose your <em>adventure</em></h2>
+      </div>
+      <div class="filter-row">
+        <button class="flt on" onclick="filterExp(this,'all')">All</button>
+        <button class="flt" onclick="filterExp(this,'private')">Private</button>
+        <button class="flt" onclick="filterExp(this,'group')">Group</button>
+        <button class="flt" onclick="filterExp(this,'migration')">Migration</button>
+        <button class="flt" onclick="filterExp(this,'luxury')">Luxury</button>
+      </div>
+    </div>
+    <div class="exp-grid" id="exp-grid">
+      <a class="exp-card" href="tour-detail.html" data-f="private">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1486591038519-6e719f5f6a05?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Private</span></div>
+        <div class="exp-body"><div class="exp-days">5 Days</div><div class="exp-title">Serengeti &amp; Ngorongoro Classic</div><div class="exp-parks">Serengeti · Ngorongoro · Lake Manyara</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="2450">$2,450</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+      <a class="exp-card" href="tour-detail.html" data-f="migration">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Migration</span></div>
+        <div class="exp-body"><div class="exp-days">7 Days</div><div class="exp-title">Great Migration Witness</div><div class="exp-parks">Northern Serengeti · Mara River Crossing</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="3600">$3,600</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+      <a class="exp-card" href="tour-detail.html" data-f="private">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1551292831-023188e78222?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Private</span></div>
+        <div class="exp-body"><div class="exp-days">3 Days</div><div class="exp-title">Tarangire &amp; Manyara Explorer</div><div class="exp-parks">Tarangire · Lake Manyara · Arusha NP</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="1290">$1,290</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+      <a class="exp-card" href="tour-detail.html" data-f="group">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1504440374568-c6d6bce52fa2?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Group</span></div>
+        <div class="exp-body"><div class="exp-days">6 Days</div><div class="exp-title">Northern Circuit Group Safari</div><div class="exp-parks">Serengeti · Ngorongoro · Tarangire · Manyara</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="2100">$2,100</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+      <a class="exp-card" href="tour-detail.html" data-f="luxury">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Luxury</span></div>
+        <div class="exp-body"><div class="exp-days">8 Days</div><div class="exp-title">Ultimate Tanzania Luxury Safari</div><div class="exp-parks">Serengeti · Ngorongoro · Private Conservancies</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="6800">$6,800</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+      <a class="exp-card" href="tour-detail.html" data-f="group">
+        <div class="exp-card-img"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&q=70" alt="" loading="lazy"><span class="exp-tag">Group</span></div>
+        <div class="exp-body"><div class="exp-days">4 Days</div><div class="exp-title">Budget Ngorongoro &amp; Manyara</div><div class="exp-parks">Ngorongoro Crater · Lake Manyara</div><div class="exp-footer"><div class="exp-price"><sup class="price-from-label">from </sup><span class="price-amount" data-price-usd="980">$980</span></div><div class="exp-arrow">→</div></div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WILDLIFE -->
+<section class="animals-section">
+  <div class="container">
+    <div class="section-eyebrow">Wildlife</div>
+    <h2 class="section-h2">Spot the <em>Big Five</em> &amp; beyond</h2>
+    <p class="section-lead">Tanzania is home to some of the world's greatest concentrations of wildlife. From the iconic Big Five to rare wild dogs and hundreds of bird species, every game drive is different.</p>
+    <div class="animals-grid">
+      <div class="animal-card"><span class="animal-emoji">🦁</span><div class="animal-name">Lion</div><div class="animal-desc">Year-round in Serengeti &amp; Ngorongoro</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐘</span><div class="animal-name">Elephant</div><div class="animal-desc">Largest herds in Tarangire</div></div>
+      <div class="animal-card"><span class="animal-emoji">🦏</span><div class="animal-name">Rhino</div><div class="animal-desc">Black rhino in Ngorongoro Crater</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐆</span><div class="animal-name">Leopard</div><div class="animal-desc">Spotted in trees along rivers</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐃</span><div class="animal-name">Buffalo</div><div class="animal-desc">Massive herds across all parks</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐊</span><div class="animal-name">Crocodile</div><div class="animal-desc">Mara River crossings</div></div>
+      <div class="animal-card"><span class="animal-emoji">🦒</span><div class="animal-name">Giraffe</div><div class="animal-desc">Masai giraffe throughout</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐆</span><div class="animal-name">Cheetah</div><div class="animal-desc">Best spotted in open plains</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐵</span><div class="animal-name">Baboon</div><div class="animal-desc">Common in woodland areas</div></div>
+      <div class="animal-card"><span class="animal-emoji">🐦</span><div class="animal-name">Birds (500+)</div><div class="animal-desc">Flamingos, eagles, storks &amp; more</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BEST TIME -->
+<section style="background: var(--warm-white);">
+  <div class="container">
+    <div class="section-eyebrow">Planning</div>
+    <h2 class="section-h2">Best time to <em>go on safari</em></h2>
+    <p class="section-lead">Tanzania offers excellent wildlife viewing all year. The dry season (June–October) is generally the best for game viewing, while the wet season brings lush landscapes and newborn animals.</p>
+    <div class="months-grid">
+      <div class="month-col"><div class="month-label">Jan</div><div class="month-bar good"><div class="month-tip">Calving season</div></div></div>
+      <div class="month-col"><div class="month-label">Feb</div><div class="month-bar good"></div></div>
+      <div class="month-col"><div class="month-label">Mar</div><div class="month-bar ok"></div></div>
+      <div class="month-col"><div class="month-label">Apr</div><div class="month-bar ok"></div></div>
+      <div class="month-col"><div class="month-label">May</div><div class="month-bar ok"></div></div>
+      <div class="month-col"><div class="month-label">Jun</div><div class="month-bar peak"><div class="month-tip">Dry season begins</div></div></div>
+      <div class="month-col"><div class="month-label">Jul</div><div class="month-bar peak"></div></div>
+      <div class="month-col"><div class="month-label">Aug</div><div class="month-bar peak"><div class="month-tip">River crossings peak</div></div></div>
+      <div class="month-col"><div class="month-label">Sep</div><div class="month-bar peak"></div></div>
+      <div class="month-col"><div class="month-label">Oct</div><div class="month-bar good"></div></div>
+      <div class="month-col"><div class="month-label">Nov</div><div class="month-bar ok"></div></div>
+      <div class="month-col"><div class="month-label">Dec</div><div class="month-bar good"></div></div>
+    </div>
+    <div class="bar-legend">
+      <div class="leg"><div class="leg-dot" style="background:rgba(196,98,45,0.7);"></div> Peak season</div>
+      <div class="leg"><div class="leg-dot" style="background:rgba(212,134,58,0.5);"></div> Good</div>
+      <div class="leg"><div class="leg-dot" style="background:rgba(196,98,45,0.18);"></div> Shoulder</div>
+    </div>
+  </div>
+</section>
+
+<!-- VEHICLES -->
+<section style="background: var(--sand-light);" id="vehicles">
+  <div class="container">
+    <div class="vehicle-grid">
+      <div>
+        <div class="section-eyebrow">Our Fleet</div>
+        <h2 class="section-h2">Safari in <em>comfort &amp; style</em></h2>
+        <div class="ruled-line"></div>
+        <p class="section-lead">We use custom-built Toyota Land Cruisers with pop-up roofs — the gold standard of safari vehicles. Every car is fitted out for maximum wildlife viewing and all-day comfort.</p>
+        <div class="vehicle-features">
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></div><div class="vf-text"><strong>Pop-Up Roof</strong><span>360° unobstructed views</span></div></div>
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg></div><div class="vf-text"><strong>Fridge &amp; Drinks</strong><span>Cold drinks all day</span></div></div>
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div><div class="vf-text"><strong>Wi-Fi Onboard</strong><span>Stay connected on the go</span></div></div>
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div><div class="vf-text"><strong>USB Charging</strong><span>Keep cameras powered</span></div></div>
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div class="vf-text"><strong>First Aid Kit</strong><span>Safety on every drive</span></div></div>
+          <div class="vf"><div class="vf-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div><div class="vf-text"><strong>Max 6 Guests</strong><span>Window seat guaranteed</span></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="split-img-frame square" style="aspect-ratio:4/3;">
+          <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80" alt="Safari vehicle" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg" style="background-image: url('https://images.unsplash.com/photo-1568111561564-08726a1563e1?w=1600&q=80');"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Start Planning</div>
+    <h2 class="cta-h2">Ready for your <em>safari?</em></h2>
+    <p class="cta-p">Tell us your dates, dream parks and budget. We'll design a personalised itinerary and get back to you within 24 hours.</p>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-light" data-i18n="plan_safari">Plan My Safari →</a>
+      <a href="national-parks.html" class="btn-outline-light" data-i18n="explore_parks">Explore All Parks</a>
+    </div>
+  </div>
+</section>
+
+
+<script>
+function filterExp(btn, cat) {
+  document.querySelectorAll('.flt').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.exp-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.f === cat) ? 'block' : 'none';
+  });
+}
+</script>
+
+
+<div class="contact-strip">
+  <p class="contact-strip-copy"><strong>Ready to talk?</strong> Our team is available 7 days a week.</p>
+  <div class="contact-chips">
+    <a href="/cdn-cgi/l/email-protection#0f676a6363604f7c6e796e61616e6e616b7c7a6262667b216c60217b75" class="chip">&#9993; <span class="__cf_email__" data-cfemail="a4ccc1c8c8cbe4d7c5d2c5cacac5c5cac0d7d1c9c9cdd08ac7cb8ad0de">[email&#160;protected]</span></a>
+    <a href="tel:+255000000000" class="chip">&#9990; +255 000 000 000</a>
+    <a href="https://wa.me/255000000000" class="chip">WhatsApp</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-logo footer-logo-img-wrap">
+      <img src="logo.jpg" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
+      <span>Godhope <em style="font-style:italic;">Adventure</em></span>
+    </a>
+      <p class="footer-about"><span data-i18n="footer_about">Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Arusha. Adventure Without Limits.</span></p>
+      <div class="footer-socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">fb</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Safari</h5>
+      <ul>
+        <li><a href="safari.html">Safari Overview</a></li>
+        <li><a href="national-parks.html">National Parks</a></li>
+        <li><a href="safari.html">Private Safari</a></li>
+        <li><a href="safari.html">Group Safari</a></li>
+        <li><a href="safari.html">Great Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Climbing</h5>
+      <ul>
+        <li><a href="climbing.html">Climbing Overview</a></li>
+        <li><a href="climbing.html">Lemosho Route</a></li>
+        <li><a href="climbing.html">Machame Route</a></li>
+        <li><a href="climbing.html">Mount Meru</a></li>
+        <li><a href="climbing.html">Climbing FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Our Guides</a></li>
+        <li><a href="about.html">Conservation</a></li>
+        <li><a href="about.html">Reviews</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Godhope Adventure. All rights reserved. &middot; Arusha, Tanzania</span>
+    <div class="footer-certs">
+      <span class="cert">Licensed Tour Operator</span>
+      <span class="cert">Tanzania Tourism Board</span>
+    </div>
+  </div>
+</footer>
+<a href="https://wa.me/255000000000" class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>
+  <span class="wa-float-label">Chat with us</span>
+</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+
+<script>
+(function(){
+  var nav=document.getElementById('nav');
+  if(!nav)return;
+  // Scroll shadow for transparent nav (homepage)
+  if(!nav.classList.contains('solid')){
+    window.addEventListener('scroll',function(){
+      nav.classList.toggle('scrolled',window.scrollY>60);
+    },{passive:true});
+  }
+  // Hamburger
+  var ham=document.getElementById('ham');
+  var mob=document.getElementById('mob-nav');
+  var cls=document.getElementById('mob-close');
+  if(ham&&mob){
+    ham.addEventListener('click',function(){
+      mob.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  }
+  if(cls&&mob){
+    cls.addEventListener('click',function(){
+      mob.classList.remove('open');
+      document.body.style.overflow='';
+    });
+  }
+  if(mob){
+    mob.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        mob.classList.remove('open');
+        document.body.style.overflow='';
+      });
+    });
+    // Close on backdrop click
+    mob.addEventListener('click',function(e){
+      if(e.target===mob){ mob.classList.remove('open'); document.body.style.overflow=''; }
+    });
+  }
+  // Currency dropdown close on outside click
+  document.addEventListener('click',function(){
+    var d=document.getElementById('gha-cur-drop');
+    if(d)d.classList.remove('open');
+  });
+  var ct=document.getElementById('gha-cur-toggle');
+  var cd=document.getElementById('gha-cur-drop');
+  if(ct&&cd){
+    ct.addEventListener('click',function(e){
+      e.stopPropagation();
+      cd.classList.toggle('open');
+    });
+  }
+})();
+</script>
+</body>
+</html>
