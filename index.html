@@ -798,7 +798,19 @@ document.addEventListener('DOMContentLoaded',function(){
 <!-- HERO -->
 <div class="hero" id="home">
   <div class="hero-slides" id="hero-slides">
-  <div class="hero-slide active" style="background-image:url('img6.jpg')"></div>
+    <!-- Slide 1 — Your Godhope Adventure AI Image -->
+  <div class="hero-slide active">
+    <picture>
+      <source media="(max-width:640px)"
+              srcset="img6.jpg">
+      <source media="(max-width:1200px)"
+              srcset="img6.jpg">
+      <img src="img6.jpg"
+           alt="Godhope Adventure team on Kilimanjaro"
+           fetchpriority="high">
+    </picture>
+  </div>
+  <!-- <div class="hero-slide active" style="background-image:url('img6.jpg')"></div> -->
   <div class="hero-slide" style="background-image:url('toptop.jpg')"></div>
   <!-- <div class="hero-slide" style="background-image:url('golini.jpeg')"></div> -->
   <div class="hero-slide" style="background-image:url('cheetahwide.avif')"></div>
