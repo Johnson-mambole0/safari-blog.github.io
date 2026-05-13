@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Godhope Adventure | Tanzania Safari &amp; Climbing</title>
-<link rel="icon" type="logo.png" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -16,7 +15,7 @@
 .wa-float:hover .wa-float-label{opacity:1;transform:translateX(0)}
 @keyframes wa-pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5),0 4px 20px rgba(37,211,102,.4)}70%{box-shadow:0 0 0 12px rgba(37,211,102,0),0 4px 20px rgba(37,211,102,.4)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0),0 4px 20px rgba(37,211,102,.4)}}
 @media(max-width:960px){.wa-float{bottom:1.25rem;right:1.25rem;padding:.7rem;border-radius:50%;max-width:48px}.wa-float:hover{max-width:48px;padding:.7rem;border-radius:50%}.wa-float-label{display:none}}
-
+ 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;transition:background .35s,padding .3s,box-shadow .3s}
 nav.scrolled{background:rgba(253,250,244,.97);padding:.75rem 4rem;box-shadow:0 1px 0 rgba(124,61,30,.12);backdrop-filter:blur(12px)}
@@ -112,15 +111,15 @@ nav.scrolled .hamburger span{background:var(--bark)}
   text-transform:uppercase;
 }
 .mobile-nav .mob-nav-cta:hover{background:var(--clay) !important}
-
+ 
 @media(max-width:960px){
   nav{padding:.9rem 1.5rem!important}
   .nav-links{display:none!important}
   .hamburger{display:flex!important}
 }
-
+ 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
 :root {
   --clay:        #7C3D1E;
   --clay-dark:   #5A2A0F;
@@ -141,7 +140,7 @@ nav.scrolled .hamburger span{background:var(--bark)}
   --serif: 'Playfair Display', Georgia, serif;
   --sans: 'Jost', sans-serif;
 }
-
+ 
 html { scroll-behavior: smooth; }
 body {
   background: var(--warm-white);
@@ -151,8 +150,8 @@ body {
   line-height: 1.75;
   overflow-x: hidden;
 }
-
-
+ 
+ 
 nav.scrolled {
   background: rgba(253,250,244,0.96);
   padding: 1rem 5rem;
@@ -203,71 +202,100 @@ nav.scrolled .nav-cta { color: var(--warm-white) !important; }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
 .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--warm-white); transition: background 0.3s; }
 nav.scrolled .hamburger span { background: var(--terra); }
-
+ 
 /* ── HERO ── */
 .hero {
   height: 100vh; min-height: 640px;
   position: relative; overflow: hidden;
   display: flex; align-items: flex-end;
 }
-
-  
 /* ── HERO SLIDESHOW ── */
-.hero-slides { position:absolute; inset:0; }
-.hero-slide {
-  position:absolute; inset:0;
-  background-size:cover; background-position:center;
+.hero-slides{position:absolute;inset:0;z-index:1}
+.hero-slide{
+  position:absolute;inset:0;
   opacity:0;
-  transition:opacity 1.2s ease-in-out;
+  transition:opacity 1.4s ease-in-out;
   will-change:opacity;
 }
-.hero-slide.active { opacity:1; }
+.hero-slide.active{opacity:1}
+ 
+/* <picture> inside each slide fills the container perfectly */
+.hero-slide picture,
+.hero-slide img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  /* Default: center — good for landscapes/wildlife */
+  object-position:center center;
+  display:block;
+}
+ 
+/* Slide-specific focal points for best cropping on all screens */
+.hero-slide:nth-child(1) img{ object-position:center 30%; }  /* team shot — keep faces */
+.hero-slide:nth-child(2) img{ object-position:center 40%; }  /* serengeti — horizon */
+.hero-slide:nth-child(3) img{ object-position:center 35%; }  /* kilimanjaro — peak */
+.hero-slide:nth-child(4) img{ object-position:center 55%; }  /* elephant — body */
+.hero-slide:nth-child(5) img{ object-position:center 45%; }  /* safari — vehicle */
+ 
+/* Mobile overrides — shift focal point higher so subject isn't cropped */
+@media(max-width:640px){
+  .hero-slide:nth-child(1) img{ object-position:center 20%; }
+  .hero-slide:nth-child(2) img{ object-position:center 35%; }
+  .hero-slide:nth-child(3) img{ object-position:50%  25%; }
+  .hero-slide:nth-child(4) img{ object-position:center 40%; }
+  .hero-slide:nth-child(5) img{ object-position:center 40%; }
+}
  
 /* Arrows */
-.hero-arrow {
-  position:absolute; top:50%; z-index:4;
+.hero-arrow{
+  position:absolute;top:50%;z-index:4;
   transform:translateY(-50%);
-  width:44px; height:44px;
+  width:46px;height:46px;
   background:rgba(59,37,22,.45);
   border:1px solid rgba(242,228,203,.25);
   border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; color:rgba(242,228,203,.9);
-  font-size:1.1rem; line-height:1;
-  transition:background .2s, border-color .2s;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(242,228,203,.9);
+  font-size:1.1rem;line-height:1;
+  transition:background .2s,border-color .2s;
   backdrop-filter:blur(4px);
   user-select:none;
 }
-.hero-arrow:hover { background:var(--terra); border-color:var(--terra); }
-.hero-arrow-prev { left:1.5rem; }
-.hero-arrow-next { right:1.5rem; }
+.hero-arrow:hover{background:var(--terra);border-color:var(--terra)}
+.hero-arrow-prev{left:1.5rem}
+.hero-arrow-next{right:1.5rem}
  
 /* Dots */
-.hero-dots {
-  position:absolute; bottom:5.5rem; left:50%;
+.hero-dots{
+  position:absolute;bottom:5.5rem;left:50%;
   transform:translateX(-50%);
-  display:flex; gap:.5rem; z-index:4;
+  display:flex;gap:.5rem;z-index:4;
 }
-.hero-dot {
-  width:8px; height:8px; border-radius:50%;
+.hero-dot{
+  width:8px;height:8px;border-radius:50%;
   background:rgba(242,228,203,.35);
   border:1px solid rgba(242,228,203,.4);
   cursor:pointer;
-  transition:background .3s, transform .3s;
+  transition:background .3s,transform .3s;
 }
-.hero-dot.active {
-  background:var(--terra);
-  border-color:var(--terra);
-  transform:scale(1.3);
+.hero-dot.active{background:var(--terra);border-color:var(--terra);transform:scale(1.3)}
+ 
+/* Slide counter */
+.hero-counter{
+  position:absolute;bottom:5.5rem;right:2rem;
+  z-index:4;font-family:var(--sans);
+  font-size:.75rem;letter-spacing:.12em;
+  color:rgba(242,228,203,.6);
 }
  
 @media(max-width:768px){
-  .hero-arrow { width:36px; height:36px; font-size:.9rem; }
-  .hero-arrow-prev { left:.75rem; }
-  .hero-arrow-next { right:.75rem; }
+  .hero-arrow{width:38px;height:38px;font-size:.95rem}
+  .hero-arrow-prev{left:.75rem}
+  .hero-arrow-next{right:.75rem}
+  .hero-counter{display:none}
+  .hero-dots{bottom:4.5rem}
 }
-
-  
+ 
 .hero-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -305,10 +333,10 @@ nav.scrolled .hamburger span { background: var(--terra); }
   font-family: var(--serif);
   font-size: clamp(3rem, 6.5vw, 5.5rem);
   font-weight: 400; line-height: 1.06;
-  color: var(--terra);
+  color: var(--bark);
   margin-bottom: 1.5rem;
 }
-.hero-h1 em { font-style: italic; color: var(--warm-white); }
+.hero-h1 em { font-style: italic; color: var(--clay); }
 .hero-sub {
   font-size: 1.05rem; color: var(--text-mid); max-width: 460px; margin-bottom: 2.25rem;
 }
@@ -349,7 +377,7 @@ nav.scrolled .hamburger span { background: var(--terra); }
   font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--text-muted); margin-top: 0.2rem;
 }
-
+ 
 /* ── SECTION COMMONS ── */
 section { padding: 7rem 5rem; }
 .container { max-width: 1200px; margin: 0 auto; }
@@ -372,7 +400,7 @@ section { padding: 7rem 5rem; }
   background: linear-gradient(to right, var(--terra), var(--amber-pale));
   margin: 1.75rem 0;
 }
-
+ 
 /* ── INTRO BAND ── */
 .intro-band {
   background: var(--sand);
@@ -397,7 +425,7 @@ section { padding: 7rem 5rem; }
 .intro-pill-icon svg { fill: var(--warm-white); width: 20px; height: 20px; }
 .intro-pill-text strong { display: block; font-weight: 500; color: var(--bark); font-size: 0.92rem; }
 .intro-pill-text span { font-size: 0.8rem; color: var(--text-muted); }
-
+ 
 /* ── SPLIT SECTIONS ── */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
 .split-visual { position: relative; }
@@ -442,7 +470,7 @@ section { padding: 7rem 5rem; }
   padding: 0.2rem 0.6rem; border-radius: 1px; white-space: nowrap;
 }
 .rdays { font-size: 0.76rem; color: var(--text-faint); white-space: nowrap; }
-
+ 
 /* ── TOURS ── */
 .tours-section { background: var(--sand-light); }
 .filter-row { display: flex; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
@@ -489,7 +517,7 @@ section { padding: 7rem 5rem; }
   transition: background 0.2s, color 0.2s;
 }
 .tour-card:hover .tour-arrow { background: var(--terra); color: var(--warm-white); }
-
+ 
 /* ── PARKS MOSAIC ── */
 .parks-section { background: var(--sand); padding: 7rem 5rem; }
 .parks-mosaic {
@@ -511,7 +539,7 @@ section { padding: 7rem 5rem; }
 .pk-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; }
 .pk-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber-pale); }
 .pk-name { font-family: var(--serif); font-size: 1.25rem; color: #fff; line-height: 1.2; }
-
+ 
 /* ── TRUST GRID ── */
 .trust-section { background: var(--warm-white); }
 .trust-grid {
@@ -535,7 +563,7 @@ section { padding: 7rem 5rem; }
 .trust-icon svg { fill: var(--terra); width: 20px; height: 20px; }
 .trust-title { font-family: var(--serif); font-size: 1.1rem; color: var(--bark); margin-bottom: 0.6rem; }
 .trust-text { font-size: 0.86rem; color: var(--text-muted); line-height: 1.75; }
-
+ 
 /* ── STATS BAND ── */
 .stats-band {
   background: var(--clay);
@@ -559,7 +587,7 @@ section { padding: 7rem 5rem; }
 .stat-item:last-child { border-right: none; }
 .stat-n { font-family: var(--serif); font-size: 3.2rem; font-weight: 400; color: var(--sand); line-height: 1; }
 .stat-l { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(242,228,203,0.5); margin-top: 0.5rem; }
-
+ 
 /* ── TESTIMONIALS ── */
 .testi-section { background: var(--sand-light); }
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.75rem; margin-top: 3.5rem; }
@@ -575,7 +603,7 @@ section { padding: 7rem 5rem; }
 .testi-av { width: 38px; height: 38px; border-radius: 50%; background: rgba(196,98,45,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; color: var(--terra); font-weight: 500; }
 .testi-name { font-size: 0.87rem; color: var(--bark); font-weight: 400; }
 .testi-trip { font-size: 0.73rem; color: var(--text-faint); }
-
+ 
 /* ── CTA ── */
 .cta-section { position: relative; padding: 9rem 5rem; overflow: hidden; text-align: center; }
 .cta-bg {
@@ -594,7 +622,7 @@ section { padding: 7rem 5rem; }
 .btn-light:hover { background: var(--warm-white); }
 .btn-ol { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid rgba(242,228,203,0.45); color: var(--sand); padding: 0.9rem 2rem; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: border-color 0.2s, background 0.2s; }
 .btn-ol:hover { border-color: var(--sand); background: rgba(242,228,203,0.08); }
-
+ 
 /* ── CONTACT STRIP ── */
 .contact-strip {
   background: var(--sand);
@@ -607,7 +635,7 @@ section { padding: 7rem 5rem; }
 .contact-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 .chip { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid rgba(196,98,45,0.3); color: var(--text-mid); padding: 0.55rem 1.1rem; font-size: 0.8rem; text-decoration: none; border-radius: 2px; transition: border-color 0.2s, color 0.2s; }
 .chip:hover { border-color: var(--terra); color: var(--terra); }
-
+ 
 /* ── FOOTER ── */
 footer { background: var(--bark); padding: 5rem 5rem 3rem; }
 .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; padding-bottom: 4rem; border-bottom: 1px solid rgba(242,228,203,0.1); }
@@ -623,12 +651,12 @@ footer { background: var(--bark); padding: 5rem 5rem 3rem; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: rgba(196,164,130,0.3); flex-wrap: wrap; gap: 1rem; }
 .footer-certs { display: flex; gap: 0.75rem; }
 .cert { border: 1px solid rgba(196,164,130,0.15); padding: 0.3rem 0.75rem; font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(196,164,130,0.3); }
-
+ 
 /* ── ANIMATIONS ── */
 @keyframes riseIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 .rise { opacity: 0; animation: riseIn 0.8s forwards; }
 .d1 { animation-delay: 0.1s; } .d2 { animation-delay: 0.25s; } .d3 { animation-delay: 0.4s; } .d4 { animation-delay: 0.55s; }
-
+ 
 /* ── RESPONSIVE ── */
 @media (max-width: 960px) {
   nav { padding: 1.2rem 1.5rem; }
@@ -664,13 +692,13 @@ footer { background: var(--bark); padding: 5rem 5rem 3rem; }
   .contact-strip { padding: 2rem 1.5rem; }
 }
 </style>
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 <style id="gha-topbar-css">
 .gha-topbar{position:fixed;top:0;left:0;right:0;z-index:600;background:var(--bark);font-family:var(--sans);font-size:.75rem}
 .gha-topbar-inner{max-width:1400px;margin:0 auto;padding:.4rem 3.5rem;display:flex;align-items:center;justify-content:flex-end;gap:.75rem}
@@ -1298,64 +1326,61 @@ function filter(btn, cat) {
 (function(){
   var slides  = document.querySelectorAll('.hero-slide');
   var dots    = document.querySelectorAll('.hero-dot');
+  var counter = document.getElementById('hero-counter');
+  var total   = slides.length;
   var current = 0;
   var timer   = null;
-  var DELAY   = 5000; // ms between auto-advances
+  var DELAY   = 6000;
  
   function goSlide(n) {
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
-    current = (n + slides.length) % slides.length;
+    current = (n + total) % total;
     slides[current].classList.add('active');
     dots[current].classList.add('active');
+    if (counter) counter.textContent = (current + 1) + ' / ' + total;
+    // Preload next image
+    var nextIdx = (current + 1) % total;
+    var nextImg = slides[nextIdx].querySelector('img');
+    if (nextImg && nextImg.loading === 'lazy') {
+      nextImg.loading = 'eager';
+    }
     resetTimer();
   }
  
-  function next() { goSlide(current + 1); }
-  function prev() { goSlide(current - 1); }
- 
   function resetTimer() {
     clearInterval(timer);
-    timer = setInterval(next, DELAY);
+    timer = setInterval(function(){ goSlide(current + 1); }, DELAY);
   }
  
-  // Expose goSlide globally for dot onclick handlers
   window.goSlide = goSlide;
  
-  // Arrow buttons
   var btnPrev = document.getElementById('hero-prev');
   var btnNext = document.getElementById('hero-next');
-  if (btnPrev) btnPrev.addEventListener('click', function(){ prev(); });
-  if (btnNext) btnNext.addEventListener('click', function(){ next(); });
+  if (btnPrev) btnPrev.addEventListener('click', function(){ goSlide(current - 1); });
+  if (btnNext) btnNext.addEventListener('click', function(){ goSlide(current + 1); });
  
-  // Touch / swipe support
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowLeft')  goSlide(current - 1);
+    if (e.key === 'ArrowRight') goSlide(current + 1);
+  });
+ 
+  // Touch / swipe
   var touchStartX = 0;
   var heroEl = document.getElementById('home');
   if (heroEl) {
-    heroEl.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
+    heroEl.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; },{passive:true});
     heroEl.addEventListener('touchend',   function(e){
       var dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
-    }, {passive:true});
-  }
- 
-  // Pause on hover
-  if (heroEl) {
+      if (Math.abs(dx) > 40) dx < 0 ? goSlide(current + 1) : goSlide(current - 1);
+    },{passive:true});
+    // Pause on hover
     heroEl.addEventListener('mouseenter', function(){ clearInterval(timer); });
-    heroEl.addEventListener('mouseleave', function(){ resetTimer(); });
+    heroEl.addEventListener('mouseleave', resetTimer);
   }
  
-  // Preload next image for smoother transitions
-  function preload(index) {
-    var next_slide = slides[(index + 1) % slides.length];
-    var bg = next_slide.style.backgroundImage;
-    var url = bg.replace(/^url\(['"]?|['"]?\)$/g, '');
-    if (url) { var img = new Image(); img.src = url; }
-  }
- 
-  // Start
   resetTimer();
-  preload(0);
 })();
 </script>
 </body>
