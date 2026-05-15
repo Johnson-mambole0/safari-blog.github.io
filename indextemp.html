@@ -145,8 +145,8 @@ nav{
       rgba(20,10,4,.45) 100%
     ),
     url('nav-banner.jpg');
-  background-size:cover;
-  background-position:center 38%;
+  background-size:100% 100%;
+  background-position:center center;
   background-repeat:no-repeat;
   /* subtle bottom border to separate from hero */
   border-bottom:1px solid rgba(237,184,122,.18);
@@ -266,6 +266,7 @@ nav.scrolled .hamburger span{background:var(--terra)}
     grid-template-columns:auto 1fr;
     padding:.65rem 1.25rem .65rem 1rem;
     /* On mobile — keep image but crop to centre */
+    background-size:100% 100%;
     background-position:center center;
   }
   .nav-logo{flex-direction:row;gap:.45rem}
@@ -281,7 +282,8 @@ nav.scrolled .hamburger span{background:var(--terra)}
     background-image:
       linear-gradient(rgba(20,10,4,.25),rgba(20,10,4,.55)),
       url('nav-banner.jpg');
-    background-position:center 30%;
+    background-size:100% 100%;
+    background-position:center center;
   }
 }
 
