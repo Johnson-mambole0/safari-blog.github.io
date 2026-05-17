@@ -795,28 +795,185 @@ footer { background: var(--bark); padding: 5rem 5rem 3rem; }
 
 
 <style id="gha-topbar-css">
-.gha-topbar{position:fixed;top:0;left:0;right:0;z-index:600;background:var(--bark);font-family:var(--sans);font-size:.75rem}
-.gha-topbar-inner{max-width:1400px;margin:0 auto;padding:.4rem 3.5rem;display:flex;align-items:center;justify-content:flex-end;gap:.75rem}
-.gha-gt .goog-te-gadget{font-size:.72rem!important;color:rgba(237,184,122,.75)!important;font-family:var(--sans)!important}
-.gha-gt select,.gha-gt .goog-te-combo{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.22rem .5rem;border-radius:2px;cursor:pointer;outline:none;max-width:140px}
+/* ══ UTILITY BAR (row 1) ════════════════════════════════════════ */
+.gha-topbar{
+  position:fixed;top:0;left:0;right:0;
+  z-index:600;
+  background:#1a0e06;
+  font-family:var(--sans);
+  font-size:.75rem;
+  border-bottom:1px solid rgba(237,184,122,.1);
+}
+.gha-topbar-inner{
+  max-width:1400px;margin:0 auto;
+  padding:.38rem 3rem;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+}
+/* Left contact links */
+.gha-topbar-left{
+  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;
+}
+.gha-top-contact{
+  display:inline-flex;align-items:center;gap:.35rem;
+  color:rgba(237,184,122,.7);text-decoration:none;
+  font-size:.72rem;transition:color .2s;white-space:nowrap;
+}
+.gha-top-contact:hover{color:var(--amber-pale)}
+.gha-top-sep{color:rgba(237,184,122,.25);font-size:.65rem}
+.gha-top-enquire{
+  display:inline-flex;align-items:center;
+  background:var(--terra);color:#fff;
+  padding:.22rem .8rem;border-radius:2px;
+  text-decoration:none;font-size:.68rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:background .2s;white-space:nowrap;
+}
+.gha-top-enquire:hover{background:var(--clay)}
+/* Right: language + currency */
+.gha-topbar-right{
+  display:flex;align-items:center;gap:.75rem;
+}
+/* Google Translate */
+.gha-gt .goog-te-gadget{font-size:.72rem!important;color:rgba(237,184,122,.7)!important;font-family:var(--sans)!important}
+.gha-gt select,.gha-gt .goog-te-combo{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(237,184,122,.2);
+  color:rgba(237,184,122,.85);
+  font-family:var(--sans);font-size:.7rem;
+  padding:.2rem .4rem;border-radius:2px;
+  cursor:pointer;outline:none;max-width:130px;
+}
 .gha-gt select:focus{border-color:var(--amber-pale)}
 .goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
 .goog-logo-link,.goog-te-gadget>span{display:none!important}
 body{top:0!important}
-.gha-topbar-right{display:flex;align-items:center;gap:.75rem}
+/* Currency button */
 .gha-cur-wrap{position:relative}
-.gha-cur-btn{background:rgba(255,255,255,.06);border:1px solid rgba(237,184,122,.2);color:rgba(237,184,122,.85);font-family:var(--sans);font-size:.72rem;padding:.24rem .65rem;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s;white-space:nowrap;line-height:1.4}
+.gha-cur-btn{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(237,184,122,.2);
+  color:rgba(237,184,122,.85);
+  font-family:var(--sans);font-size:.7rem;
+  padding:.22rem .65rem;border-radius:2px;
+  cursor:pointer;display:flex;align-items:center;gap:.4rem;
+  transition:border-color .2s,color .2s;white-space:nowrap;line-height:1.4;
+}
 .gha-cur-btn:hover{border-color:var(--amber-pale);color:var(--amber-pale)}
-.gha-cur-drop{position:fixed;top:30px;right:3.5rem;background:#2a1a0e;border:1px solid rgba(237,184,122,.15);min-width:215px;z-index:900;box-shadow:0 8px 24px rgba(0,0,0,.45);display:none;border-radius:2px;overflow:hidden}
+.gha-cur-drop{
+  position:fixed;top:28px;right:3rem;
+  background:#1a0e06;
+  border:1px solid rgba(237,184,122,.15);
+  min-width:215px;z-index:900;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+  display:none;border-radius:2px;overflow:hidden;
+}
 .gha-cur-drop.open{display:block}
-.gha-cur-drop button{display:block;width:100%;background:none;border:none;border-bottom:1px solid rgba(237,184,122,.06);padding:.6rem 1rem;color:rgba(237,184,122,.65);font-family:var(--sans);font-size:.78rem;text-align:left;cursor:pointer;transition:background .15s,color .15s}
+.gha-cur-drop button{
+  display:block;width:100%;background:none;border:none;
+  border-bottom:1px solid rgba(237,184,122,.06);
+  padding:.6rem 1rem;color:rgba(237,184,122,.65);
+  font-family:var(--sans);font-size:.78rem;
+  text-align:left;cursor:pointer;transition:background .15s,color .15s;
+}
 .gha-cur-drop button:last-child{border-bottom:none}
 .gha-cur-drop button:hover{background:rgba(237,184,122,.08);color:var(--amber-pale)}
-nav{top:30px!important}
-@media(max-width:768px){
-  .gha-topbar-inner{padding:.38rem 1rem;gap:.5rem}
-  .gha-cur-drop{right:1rem;top:28px}
-  nav{top:28px!important}
+
+/* ══ MAIN NAV (row 2) ═══════════════════════════════════════════ */
+nav{
+  position:fixed;
+  top:28px; /* sits flush below the utility bar */
+  left:0;right:0;
+  z-index:500;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:.6rem 3rem;
+  background:#fff;
+  box-shadow:0 2px 12px rgba(59,37,22,.1);
+  transition:padding .3s, box-shadow .3s;
+}
+nav.scrolled{
+  padding:.5rem 3rem;
+  box-shadow:0 2px 16px rgba(59,37,22,.14);
+}
+
+/* Logo */
+.nav-logo{
+  display:flex;align-items:center;gap:.75rem;
+  text-decoration:none;flex-shrink:0;
+}
+.nav-logo-img{
+  width:56px;height:56px;
+  object-fit:contain;border-radius:50%;
+  background:var(--bark);
+  border:2px solid rgba(224,120,32,.3);
+  flex-shrink:0;
+  transition:border-color .2s;
+}
+.nav-logo:hover .nav-logo-img{border-color:var(--terra)}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.2}
+.nav-logo-name{
+  font-family:var(--serif);
+  font-size:1.1rem;font-weight:400;
+  color:var(--bark);letter-spacing:.02em;
+}
+.nav-logo-tag{
+  font-size:.65rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--terra);
+  font-family:var(--sans);
+}
+
+/* Nav links */
+.nav-links-main{
+  display:flex;align-items:center;
+  gap:2rem;list-style:none;margin:0;padding:0;
+}
+.nav-links-main a{
+  color:var(--text-mid);text-decoration:none;
+  font-size:.78rem;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:400;
+  padding:.35rem 0;
+  border-bottom:2px solid transparent;
+  transition:color .2s,border-color .2s;
+  white-space:nowrap;
+}
+.nav-links-main a:hover{color:var(--terra);border-bottom-color:var(--terra)}
+.nav-links-main a.active{color:var(--terra);border-bottom-color:var(--terra)}
+
+/* Hamburger */
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  cursor:pointer;background:none;border:none;
+}
+.hamburger span{
+  display:block;width:24px;height:2px;
+  background:var(--bark);
+  border-radius:2px;transition:background .2s;
+}
+.hamburger:hover span{background:var(--terra)}
+
+/* ══ MOBILE ══════════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .gha-topbar-inner{padding:.35rem 1rem}
+  .gha-top-contact span,
+  .gha-top-contact svg,
+  .gha-top-sep{display:none}
+  .gha-top-contact{font-size:0;} /* hide text, keep icon only */
+  .gha-top-contact svg{display:inline-block!important;width:16px;height:16px}
+  nav{padding:.5rem 1rem;top:28px}
+  nav.scrolled{padding:.45rem 1rem}
+  .nav-logo-img{width:42px;height:42px}
+  .nav-logo-name{font-size:.9rem}
+  .nav-logo-tag{display:none}
+  .nav-links-main{display:none}
+  .hamburger{display:flex}
+  .gha-cur-drop{right:.5rem}
+}
+@media(max-width:480px){
+  .gha-topbar-inner{padding:.3rem .75rem}
+  .gha-top-enquire{display:none}
 }
 </style>
 <!-- Google Translate -->
@@ -880,6 +1037,23 @@ document.addEventListener('DOMContentLoaded',function(){
 </div>
 <div class="gha-topbar" id="gha-topbar">
   <div class="gha-topbar-inner">
+
+    <!-- Left: contact info -->
+    <div class="gha-topbar-left">
+      <a href="tel:+255000000000" class="gha-top-contact">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        +255 000 000 000
+      </a>
+      <span class="gha-top-sep">|</span>
+      <a href="mailto:hello@godhopeadventure.co.tz" class="gha-top-contact">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        hello@godhopeadventure.co.tz
+      </a>
+      <span class="gha-top-sep">|</span>
+      <a href="contact.html" class="gha-top-enquire">Enquire Now</a>
+    </div>
+
+    <!-- Right: language + currency -->
     <div class="gha-topbar-right">
       <div id="google_translate_element" class="gha-gt"></div>
       <div class="gha-cur-wrap" id="gha-cur-wrap">
@@ -899,33 +1073,38 @@ document.addEventListener('DOMContentLoaded',function(){
         </div>
       </div>
     </div>
+
+  </div>
+</div>
+    </div>
   </div>
 </div>
 <nav id="nav">
-  <!-- Left links -->
-  <ul class="nav-left">
-    <li><a href="safari.html">Safari</a></li>
-    <li><a href="climbing.html">Climbing</a></li>
-    <li><a href="national-parks.html">National Parks</a></li>
-  </ul>
 
-  <!-- Centred logo -->
+  <!-- Logo — left -->
   <a href="index.html" class="nav-logo">
     <img src="logo.png" alt="Godhope Adventure" class="nav-logo-img">
-    <span class="nav-logo-text">Godhope <em>Adventure</em></span>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Godhope Adventure</span>
+      <span class="nav-logo-tag">Adventure &amp; Safari</span>
+    </div>
   </a>
 
-  <!-- Right links -->
-  <ul class="nav-right">
+  <!-- Nav links — right side spread -->
+  <ul class="nav-links-main">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="safari.html">Wildlife Safaris</a></li>
+    <li><a href="climbing.html">Climbing</a></li>
+    <li><a href="national-parks.html">National Parks</a></li>
     <li><a href="about.html">About Us</a></li>
-    <li><a href="contact.html">Our Guides</a></li>
-    <li><a href="contact.html" class="nav-cta">Plan My Trip</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
 
   <!-- Mobile hamburger -->
   <button class="hamburger" id="ham" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
+
 </nav>
 
 <!-- HERO -->
@@ -1088,7 +1267,7 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="split">
       <div class="split-visual">
         <div class="split-img-frame">
-          <img src="https://images.unsplash.com/photo-1568111561564-08726a1563e1?w=900&q=80" alt="Elephant on safari" loading="lazy">
+          <img src="" alt="Elephant on safari" loading="lazy">
         </div>
         <div class="split-float">
           <div class="n">7</div>
@@ -1133,7 +1312,7 @@ document.addEventListener('DOMContentLoaded',function(){
       </div>
       <div class="split-visual">
         <div class="split-img-frame alt">
-          <img src="https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=900&q=80" alt="Kilimanjaro summit" loading="lazy">
+          <img src="" alt="Kilimanjaro summit" loading="lazy">
         </div>
         <div class="split-float split-float-l">
           <div class="n">5,895m</div>
@@ -1162,27 +1341,27 @@ document.addEventListener('DOMContentLoaded',function(){
     </div>
     <div class="tours-grid" id="tgrid">
       <a class="tour-card" href="index.html" data-t="safari">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1486591038519-6e719f5f6a05?w=600&q=70" alt="Serengeti" loading="lazy"><span class="tour-tag">Safari</span></div>
+        <div class="tour-card-img"><img src="" alt="Serengeti" loading="lazy"><span class="tour-tag">Safari</span></div>
         <div class="tour-body"><div class="tour-days">5 Days</div><div class="tour-title">Serengeti & Ngorongoro Classic</div><div class="tour-parks">Serengeti · Ngorongoro · Lake Manyara</div><div class="tour-footer"><div class="tour-price" data-usd="2450"><sup>from $</sup>2,450</div><div class="tour-arrow">→</div></div></div>
       </a>
       <a class="tour-card" href="index.html" data-t="climb">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&q=70" alt="Kilimanjaro" loading="lazy"><span class="tour-tag">Climbing</span></div>
+        <div class="tour-card-img"><img src="" alt="Kilimanjaro" loading="lazy"><span class="tour-tag">Climbing</span></div>
         <div class="tour-body"><div class="tour-days">7 Days</div><div class="tour-title">Kilimanjaro — Lemosho Route</div><div class="tour-parks">7 Ecological Zones · Uhuru Peak 5,895m</div><div class="tour-footer"><div class="tour-price" data-usd="2800"><sup>from $</sup>2,800</div><div class="tour-arrow">→</div></div></div>
       </a>
       <a class="tour-card" href="index.html" data-t="combo">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1504440374568-c6d6bce52fa2?w=600&q=70" alt="Combo" loading="lazy"><span class="tour-tag">Combo</span></div>
+        <div class="tour-card-img"><img src="" alt="Combo" loading="lazy"><span class="tour-tag">Combo</span></div>
         <div class="tour-body"><div class="tour-days">12 Days</div><div class="tour-title">Summit & Safari Grand Tour</div><div class="tour-parks">Kilimanjaro · Serengeti · Ngorongoro</div><div class="tour-footer"><div class="tour-price" data-usd="4900"><sup>from $</sup>4,900</div><div class="tour-arrow">→</div></div></div>
       </a>
       <a class="tour-card" href="index.html" data-t="safari">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1551292831-023188e78222?w=600&q=70" alt="Tarangire" loading="lazy"><span class="tour-tag">Safari</span></div>
+        <div class="tour-card-img"><img src="" alt="Tarangire" loading="lazy"><span class="tour-tag">Safari</span></div>
         <div class="tour-body"><div class="tour-days">3 Days</div><div class="tour-title">Tarangire & Manyara Explorer</div><div class="tour-parks">Tarangire · Lake Manyara · Arusha</div><div class="tour-footer"><div class="tour-price" data-usd="1290"><sup>from $</sup>1,290</div><div class="tour-arrow">→</div></div></div>
       </a>
       <a class="tour-card" href="index.html" data-t="climb">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?w=600&q=70" alt="Meru" loading="lazy"><span class="tour-tag">Climbing</span></div>
+        <div class="tour-card-img"><img src="" alt="Meru" loading="lazy"><span class="tour-tag">Climbing</span></div>
         <div class="tour-body"><div class="tour-days">4 Days</div><div class="tour-title">Mount Meru Ascent</div><div class="tour-parks">Arusha National Park · 4,562m summit</div><div class="tour-footer"><div class="tour-price" data-usd="1100"><sup>from $</sup>1,100</div><div class="tour-arrow">→</div></div></div>
       </a>
       <a class="tour-card" href="index.html" data-t="safari">
-        <div class="tour-card-img"><img src="https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=600&q=70" alt="Migration" loading="lazy"><span class="tour-tag">Safari</span></div>
+        <div class="tour-card-img"><img src="" alt="Migration" loading="lazy"><span class="tour-tag">Safari</span></div>
         <div class="tour-body"><div class="tour-days">7 Days</div><div class="tour-title">Great Migration Witness</div><div class="tour-parks">Northern Serengeti · Mara River Crossing</div><div class="tour-footer"><div class="tour-price" data-usd="3600"><sup>from $</sup>3,600</div><div class="tour-arrow">→</div></div></div>
       </a>
     </div>
@@ -1200,11 +1379,11 @@ document.addEventListener('DOMContentLoaded',function(){
     <p class="section-lead">Six distinct ecosystems, one extraordinary country. Every park tells a different story of Africa's wildest land.</p>
     <div class="parks-mosaic">
       <div class="pk"><img src="climbing_kilimanjaro.jpg" alt="Serengeti" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">UNESCO Heritage Site</div><div class="pk-name">Serengeti</div></div></div>
-      <div class="pk"><img src="https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=800&q=75" alt="Ngorongoro" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">UNESCO Heritage Site</div><div class="pk-name">Ngorongoro Crater</div></div></div>
-      <div class="pk"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=75" alt="Tarangire" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Elephant Country</div><div class="pk-name">Tarangire</div></div></div>
-      <div class="pk"><img src="https://images.unsplash.com/photo-1504440374568-c6d6bce52fa2?w=800&q=75" alt="Manyara" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Tree-Climbing Lions</div><div class="pk-name">Lake Manyara</div></div></div>
-      <div class="pk"><img src="https://images.unsplash.com/photo-1551292831-023188e78222?w=800&q=75" alt="Arusha NP" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">City Gateway</div><div class="pk-name">Arusha NP</div></div></div>
-      <div class="pk"><img src="https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=800&q=75" alt="Lake Natron" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Flamingo Flocks</div><div class="pk-name">Lake Natron</div></div></div>
+      <div class="pk"><img src="" alt="Ngorongoro" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">UNESCO Heritage Site</div><div class="pk-name">Ngorongoro Crater</div></div></div>
+      <div class="pk"><img src="" alt="Tarangire" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Elephant Country</div><div class="pk-name">Tarangire</div></div></div>
+      <div class="pk"><img src="" alt="Manyara" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Tree-Climbing Lions</div><div class="pk-name">Lake Manyara</div></div></div>
+      <div class="pk"><img src="" alt="Arusha NP" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">City Gateway</div><div class="pk-name">Arusha NP</div></div></div>
+      <div class="pk"><img src="" alt="Lake Natron" loading="lazy"><div class="pk-over"></div><div class="pk-info"><div class="pk-label">Flamingo Flocks</div><div class="pk-name">Lake Natron</div></div></div>
     </div>
   </div>
 </section>
