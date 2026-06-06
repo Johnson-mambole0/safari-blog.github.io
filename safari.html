@@ -101,10 +101,6 @@
  
  
 
-<!-- Google Translate -->
-
-
-
 <script>
 /* ══ CURRENCY ════════════════════════════════════════════════════ */
 var _GHA_RATES = {USD:1, EUR:.92, GBP:.79, TZS:2650, KES:130, AUD:1.53, CAD:1.36, ZAR:18.5};
@@ -236,7 +232,7 @@ function setLang(code, name){
 <body>
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-menu-close" id="mob-close">&#10005;</button>
-  <img src="logo.jpg" alt="Godhope Adventure" class="mob-logo">
+  <img src="logo.png" alt="Godhope Adventure" class="mob-logo">
   <ul>
   <li><a href="index.html">Home</a></li>
   <li><a href="safari.html" class="active">Wildlife Safaris</a></li>
@@ -318,7 +314,7 @@ function setLang(code, name){
   <div class="nav-inner">
 
     <a href="index.html" class="nav-brand">
-      <img src="logo.jpg" alt="Godhope Adventure" class="nav-logo-img">
+      <img src="logo.png" alt="Godhope Adventure" class="nav-logo-img">
     </a>
 
     <ul class="nav-menu" id="nav-menu">
@@ -629,7 +625,7 @@ function filterExp(btn, cat) {
   <div class="footer-top">
     <div>
       <a href="index.html" class="footer-logo footer-logo-img-wrap">
-      <img src="logo.jpg" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
+      <img src="logo.png" alt="Godhope Adventure" style="width:64px;height:64px;object-fit:contain;border-radius:50%;margin-bottom:0.6rem;display:block;">
       <span>Godhope <em style="font-style:italic;">Adventure</em></span>
     </a>
       <p class="footer-about"><span data-i18n="footer_about">Godhope Adventure — your trusted Tanzania operator for national park safaris and Kilimanjaro climbs. Based in Kilimanjaro region. Adventure Without Limits.</span></p>
@@ -686,55 +682,49 @@ function filterExp(btn, cat) {
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
  
  
+
 <script>
 (function(){
-  var nav=document.getElementById('nav');
-  if(!nav)return;
-  // Scroll shadow for transparent nav (homepage)
-  if(!nav.classList.contains('solid')){
-    window.addEventListener('scroll',function(){
-      nav.classList.toggle('scrolled',window.scrollY>60);
-    },{passive:true});
+  /* Topbar scroll — nav gets shadow */
+  var nav = document.getElementById('main-nav');
+  if(nav){
+    window.addEventListener('scroll', function(){
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, {passive:true});
   }
-  // Hamburger
-  var ham=document.getElementById('ham');
-  var mob=document.getElementById('mob-nav');
-  var cls=document.getElementById('mob-close');
-  if(ham&&mob){
-    ham.addEventListener('click',function(){
-      mob.classList.add('open');
-      document.body.style.overflow='hidden';
+  /* Hamburger */
+  var ham     = document.getElementById('ham');
+  var menu    = document.getElementById('mobile-menu');
+  var overlay = document.getElementById('mob-overlay');
+  var close   = document.getElementById('mob-close');
+  function openMenu(){
+    if(menu){ menu.classList.add('open'); }
+    if(overlay){ overlay.classList.add('open'); }
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu(){
+    if(menu){ menu.classList.remove('open'); }
+    if(overlay){ overlay.classList.remove('open'); }
+    document.body.style.overflow = '';
+  }
+  if(ham)     ham.addEventListener('click', openMenu);
+  if(close)   close.addEventListener('click', closeMenu);
+  if(overlay) overlay.addEventListener('click', closeMenu);
+  if(menu){
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeMenu);
     });
   }
-  if(cls&&mob){
-    cls.addEventListener('click',function(){
-      mob.classList.remove('open');
-      document.body.style.overflow='';
-    });
-  }
-  if(mob){
-    mob.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click',function(){
-        mob.classList.remove('open');
-        document.body.style.overflow='';
-      });
-    });
-    // Close on backdrop click
-    mob.addEventListener('click',function(e){
-      if(e.target===mob){ mob.classList.remove('open'); document.body.style.overflow=''; }
-    });
-  }
-  // Currency dropdown close on outside click
-  document.addEventListener('click',function(){
-    var d=document.getElementById('gha-cur-drop');
-    if(d)d.classList.remove('open');
-  });
-  var ct=document.getElementById('gha-cur-toggle');
-  var cd=document.getElementById('gha-cur-drop');
-  if(ct&&cd){
-    ct.addEventListener('click',function(e){
+  /* Currency dropdown */
+  var ct = document.getElementById('gha-cur-toggle');
+  var cd = document.getElementById('gha-cur-drop');
+  if(ct && cd){
+    ct.addEventListener('click', function(e){
       e.stopPropagation();
       cd.classList.toggle('open');
+    });
+    document.addEventListener('click', function(){
+      if(cd) cd.classList.remove('open');
     });
   }
 })();
