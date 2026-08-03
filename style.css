@@ -162,7 +162,7 @@ table{max-width:100%}
 .mob-lang-btn:hover{border-color:var(--terra);color:var(--terra)}
 .mob-lang-btn.active{background:var(--terra);border-color:var(--terra);color:#fff}
 .mob-logo{
-  width:220px;height:75px;
+  width:150px;height:150px;
   object-fit:contain;display:block;
   margin:0 auto 1.75rem;
   border-radius:3px;
